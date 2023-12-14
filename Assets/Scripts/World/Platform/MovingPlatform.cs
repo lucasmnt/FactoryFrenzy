@@ -21,14 +21,46 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField]
     public float moveSpeed = 5;
 
+    [SerializeField]
+    public BoxCollider detectionBox;
+
     private Vector3 originalPosition;
+    private Vector3 previousPosition;
 
     void Start()
     {
         originalPosition=transform.position;
+        previousPosition=originalPosition;
     }
 
     void Update()
+    {
+        MovePlatform();
+        DetectPlayableObjects();
+
+        // Update the previous position
+        previousPosition=transform.position;
+    }
+
+    void DetectPlayableObjects()
+    {
+        // Check for objects with IPlayable interface in the platform's vicinity using a box collider
+        Collider[] colliders = Physics.OverlapBox(detectionBox.bounds.center, detectionBox.bounds.extents, detectionBox.transform.rotation);
+        foreach (Collider collider in colliders)
+        {
+            IPlayable iPlayable = collider.GetComponent<IPlayable>();
+            if (iPlayable!=null)
+            {
+                // Calculate the platform movement
+                Vector3 platformMovement = transform.position-previousPosition;
+
+                // Give the player the platform's movement
+                iPlayable.StickToPlatform(platformMovement);
+            }
+        }
+    }
+
+    void MovePlatform()
     {
         switch (movementType)
         {

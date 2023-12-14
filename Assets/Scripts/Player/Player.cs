@@ -93,4 +93,10 @@ public class Player : MonoBehaviour, IPlayable
     {
         this.currentCheckpoint=newCheckpoint;
     }
+
+    public void StickToPlatform(Vector3 platformMovement)
+    {
+        // Déplace le joueur avec la plateforme
+        transform.position+=platformMovement;
+    }
 }

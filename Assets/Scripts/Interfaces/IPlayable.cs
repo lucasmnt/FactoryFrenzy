@@ -6,4 +6,6 @@ public interface IPlayable
 {
     public void Fell();
     public void UpdateCurrentCheckpoint(GameObject newCheckpoint);
+
+    public void StickToPlatform(Vector3 moveSpeed);
 }
