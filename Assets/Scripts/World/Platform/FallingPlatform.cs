@@ -21,6 +21,7 @@ public class FallingPlatform : MonoBehaviour
             if (player!=null)
             {
                 StartCoroutine(FallAndRespawn());
+                isFalling = true;
             }
         }
     }
@@ -33,6 +34,7 @@ public class FallingPlatform : MonoBehaviour
             if (player!=null)
             {
                 StartCoroutine(FallAndRespawn());
+                isFalling=true;
             }
         }
     }
