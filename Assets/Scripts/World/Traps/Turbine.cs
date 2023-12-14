@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turbine : MonoBehaviour
+public class Turbine : EditorObjects
 {
     // Start is called before the first frame update
     void Start()

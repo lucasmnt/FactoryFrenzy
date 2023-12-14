@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayable
 {
     [SerializeField, Range(0f, 100f)] 
     float interactionDistance = 0f;
@@ -24,6 +24,12 @@ public class Player : MonoBehaviour
 
     [SerializeField] 
     LayerMask raycastLayerMask;
+
+    [SerializeField]
+    private GameObject startingCheckpoint;
+
+    [SerializeField]
+    private GameObject currentCheckpoint;
 
     void Start()
     {
@@ -52,7 +58,6 @@ public class Player : MonoBehaviour
         {
             QuitGame();
         }
-
         #endregion
     }
 
@@ -63,5 +68,29 @@ public class Player : MonoBehaviour
         #else
             Application.Quit();
         #endif
+    }
+
+    // IPlayable interface implementation
+    public void Fell()
+    {
+        if (currentCheckpoint!=null)
+        {
+            Vector3 checkpointPosition = currentCheckpoint.transform.position;
+            checkpointPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
+            transform.position=checkpointPosition;
+        }
+        else
+        {
+            // Si le point de contrôle actuel n'est pas défini, vous pouvez choisir de le faire revenir à une position par défaut.
+            // Par exemple, le centre de la scène.
+            Vector3 startingPosition = startingCheckpoint.transform.position;
+            startingPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
+            transform.position=startingPosition;
+        }
+    }
+
+    public void UpdateCurrentCheckpoint(GameObject newCheckpoint)
+    {
+        this.currentCheckpoint=newCheckpoint;
     }
 }
