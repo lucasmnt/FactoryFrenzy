@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7998697257820189428}
   - component: {fileID: 601255963419850529}
   - component: {fileID: 7079596251474666525}
+  - component: {fileID: 7031098898750313824}
   m_Layer: 0
   m_Name: FallingPlatform
   m_TagString: Untagged
@@ -118,13 +119,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d85d9b3330b1564eb750278c5a7aed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objTransform: {fileID: 0}
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  xRot: 0
-  yRot: 0
-  ZRot: 0
-  xSca: 0
-  ySca: 0
-  zSca: 0
+  anim: {fileID: 0}
+--- !u!95 &7031098898750313824
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5085808882673790521}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90d7ef71879ef2044b232119385c6420, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class FallingPlatform : MonoBehaviour
 {
+    [SerializeField]
+    public Animation anim;
+
     private bool isFalling = false;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
