@@ -55,7 +55,7 @@ public class FallingPlatform : MonoBehaviour
         PlayAnimation("FallingPlatform"); // Play animation
         yield return new WaitForSeconds(3f); // Wait 5 seconds making fall the platform
 
-        StartCoroutine(FallPlatform(10f)); // make the platform fall
+        StartCoroutine(FallPlatform(20f)); // make the platform fall 20 units
 
         yield return new WaitForSeconds(2f);
         Respawn();
@@ -72,7 +72,7 @@ public class FallingPlatform : MonoBehaviour
         while (elapsedTime<1f)
         {
             transform.position=Vector3.Lerp(initialPosition, targetPosition, elapsedTime);
-            elapsedTime+=Time.deltaTime*0.5f; // Contrôlez la vitesse de descente ici
+            elapsedTime+=Time.deltaTime*2f; // Contrôlez la vitesse de descente ici
             yield return null;
         }
 

@@ -65,15 +65,15 @@ public class MovingPlatform : MonoBehaviour
         switch (movementType)
         {
             case MovementType.Horizontal:
-                float horizontalOffset = Mathf.Sin(Time.time*moveSpeed)*maxDistanceMoved;
+                float horizontalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
                 transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
                 break;
             case MovementType.Vertical:
-                float verticalOffset = Mathf.Sin(Time.time*moveSpeed)*maxDistanceMoved;
+                float verticalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
                 transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
                 break;
             case MovementType.Diagonal:
-                float diagonalOffset = Mathf.Sin(Time.time*moveSpeed)*maxDistanceMoved;
+                float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
                 transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
                 break;
         }
