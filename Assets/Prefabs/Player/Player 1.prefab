@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4131586489071473639}
   - component: {fileID: 8547878910582125815}
-  - component: {fileID: 3121283214588370861}
+  - component: {fileID: 4870377119929876435}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -84,7 +84,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &3121283214588370861
+--- !u!81 &4870377119929876435
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,8 +108,8 @@ GameObject:
   - component: {fileID: 216328576614843181}
   - component: {fileID: 7752644924097403669}
   m_Layer: 0
-  m_Name: Player
-  m_TagString: Untagged
+  m_Name: Player 1
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,6 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff282a01a7ef0c440b1f520f92dbbc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNumber: 0
+  hasFinished: 0
   interactionDistance: 0
   minDistance: 1
   maxDistance: 5

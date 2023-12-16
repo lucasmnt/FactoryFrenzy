@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayable
 {
+    [SerializeField]
+    public PlayerNumber playerNumber;
+
+    [SerializeField]
+    public bool hasFinished = false;
+
     [SerializeField, Range(0f, 100f)] 
-    float interactionDistance = 0f;
+    public float interactionDistance = 0f;
 
     [SerializeField, Range(0f, 5f)] 
     private const float maxHoldTime = 2f; // temps maximum pour force max.
@@ -98,5 +104,16 @@ public class Player : MonoBehaviour, IPlayable
     {
         // Déplace le joueur avec la plateforme
         transform.position+=platformMovement;
+    }
+
+    public PlayerNumber HasFinished()
+    {
+        this.hasFinished=true;
+        return this.playerNumber;
+    }
+
+    public bool GetFinishedState()
+    {
+        return this.hasFinished;
     }
 }
