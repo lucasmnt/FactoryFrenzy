@@ -6,6 +6,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     [SerializeField]
     public List<GameObject> playersToSpawn = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
