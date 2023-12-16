@@ -39,7 +39,7 @@ public class Player : MonoBehaviour, IPlayable
 
     void Start()
     {
-
+        this.startingCheckpoint = GameObject.FindGameObjectWithTag("Start");
     }
 
     void Update()

@@ -242,7 +242,7 @@ MonoBehaviour:
   heatlh: 200
   raycastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   startingCheckpoint: {fileID: 0}
   currentCheckpoint: {fileID: 0}
 --- !u!114 &7752644924097403669
@@ -257,9 +257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c603e9403a20464eba21fd37b0a17dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 6
   sensitivity: 2
   jumpForce: 5
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
