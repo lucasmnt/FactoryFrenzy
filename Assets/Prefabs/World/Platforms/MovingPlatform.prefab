@@ -226,7 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491cc36d7cd0305468f14aceae0cf91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementType: 1
+  movementType: 0
+  movementWay: 0
   maxDistanceMoved: 15
   moveSpeed: 1.5
   detectionBox: {fileID: 6356809632880478117}

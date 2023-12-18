@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4131586489071473639}
   - component: {fileID: 8547878910582125815}
-  - component: {fileID: 3121283214588370861}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -84,14 +83,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &3121283214588370861
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494528323788210781}
-  m_Enabled: 1
 --- !u!1 &8224917643240795552
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,8 +99,8 @@ GameObject:
   - component: {fileID: 216328576614843181}
   - component: {fileID: 7752644924097403669}
   m_Layer: 0
-  m_Name: Player
-  m_TagString: Untagged
+  m_Name: Player 2
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,7 +149,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7fd84ca229f75eb4bbd8347b0da3ec56, type: 2}
+  - {fileID: 2100000, guid: b67a7b8b164365040a60ce3d6728d7bf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -242,6 +233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff282a01a7ef0c440b1f520f92dbbc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNumber: 1
+  hasFinished: 0
   interactionDistance: 0
   minDistance: 1
   maxDistance: 5
@@ -249,7 +242,7 @@ MonoBehaviour:
   heatlh: 200
   raycastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   startingCheckpoint: {fileID: 0}
   currentCheckpoint: {fileID: 0}
 --- !u!114 &7752644924097403669
@@ -264,9 +257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c603e9403a20464eba21fd37b0a17dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 6
   sensitivity: 2
   jumpForce: 5
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1

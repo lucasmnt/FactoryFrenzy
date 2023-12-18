@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IPlayable
 {
+    public PlayerNumber HasFinished();
+    public bool GetFinishedState();
     public void Fell();
     public void UpdateCurrentCheckpoint(GameObject newCheckpoint);
     public void StickToPlatform(Vector3 moveSpeed);

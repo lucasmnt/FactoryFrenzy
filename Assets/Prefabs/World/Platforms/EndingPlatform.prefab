@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3333998940836152537}
   - component: {fileID: 1876437839576877100}
   - component: {fileID: -7789952601788413448}
+  - component: {fileID: 5287949066146574868}
   m_Layer: 0
   m_Name: EndingPlatform
   m_TagString: Untagged
@@ -128,3 +129,18 @@ MonoBehaviour:
   xSca: 0
   ySca: 0
   zSca: 0
+--- !u!114 &5287949066146574868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035884080770776507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d492639e32618db4d96e5baae5e2402e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfPlayers: 1
+  timeOfRound: 300
+  arrivalList: 

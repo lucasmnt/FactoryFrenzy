@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    public enum MovementType
-    {
-        Vertical,
-        Horizontal,
-        Diagonal
-    }
-
     [SerializeField]
     public MovementType movementType = MovementType.Horizontal;
+
+    [SerializeField]
+    public MovementWay movementWay = MovementWay.Normal;
 
     [SerializeField]
     public float maxDistanceMoved = 15;
@@ -23,6 +19,7 @@ public class MovingPlatform : MonoBehaviour
 
     [SerializeField]
     public BoxCollider detectionBox;
+
 
     private Vector3 originalPosition;
     private Vector3 previousPosition;
@@ -65,17 +62,44 @@ public class MovingPlatform : MonoBehaviour
         switch (movementType)
         {
             case MovementType.Horizontal:
-                float horizontalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
-                break;
+                if(movementWay == MovementWay.Normal)
+                {
+                    float horizontalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
+                    break;
+                }
+                else
+                {
+                    float horizontalOffset = - Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
+                    break;
+                }
             case MovementType.Vertical:
-                float verticalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
-                break;
+                if (movementWay==MovementWay.Normal)
+                {
+                    float verticalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
+                    break;
+                }
+                else
+                {
+                    float verticalOffset = - Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
+                    break;
+                }
             case MovementType.Diagonal:
-                float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
-                break;
+                if (movementWay==MovementWay.Normal)
+                {
+                    float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
+                    break;
+                }
+                else
+                {
+                    float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
+                    transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
+                    break;
+                }
         }
     }
 }

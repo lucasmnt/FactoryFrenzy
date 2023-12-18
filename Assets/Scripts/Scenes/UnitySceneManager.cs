@@ -22,4 +22,10 @@ public class UnitySceneManager : MonoBehaviour
         // Utiliser SceneManager.LoadScene pour charger la scène WorkingDayScene
         SceneManager.LoadScene("HubMulti");
     }
+
+    public void LoadSceneWithName(string sceneName)
+    {
+        // Utiliser SceneManager.LoadScene pour charger la scène WorkingDayScene
+        SceneManager.LoadScene(sceneName);
+    }
 }
