@@ -6,4 +6,5 @@ public class MapData
 {
     string mapName;
     int numberOfObjectToSpawn;
+    List<GameObject> objects;
 }
