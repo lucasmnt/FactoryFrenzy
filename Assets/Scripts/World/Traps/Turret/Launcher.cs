@@ -114,21 +114,16 @@ public class Launcher : EditorObjects
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("trigger enter");
-
         if (!lockedPlayer)
         {
-            Debug.Log("trigger enter1");
             if (other)
             {
-                Debug.Log("trigger enter2");
                 // Check if the hit object implements the IInteractable interface
                 IPlayable player = other.GetComponent<IPlayable>();
                 if (player!=null)
                 {
                     LockPlayer(player);
                     lockedPlayer=true;
-                    Debug.Log("trigger enter4");
                 }
             }
         }

@@ -206,7 +206,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -348,7 +348,7 @@ Transform:
   m_GameObject: {fileID: 4549968259723406707}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.09, y: 41.23, z: -20.52945}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -380,14 +380,16 @@ MonoBehaviour:
   xSca: 0
   ySca: 0
   zSca: 0
-  howClose: 30
+  howClose: 20
   head: {fileID: 4195668704866996429}
   barrel: {fileID: 8749089695098508747}
   _projectile: {fileID: 397463544215687200, guid: be09e028749f3fa4883e571931d282de, type: 3}
-  fireRate: 1.5
+  fireRate: 0.25
   nextFire: 0
   lockedPlayer: 0
   lockedTime: 5
+  inactiveTime: 2
+  maxTargetDistance: 20
 --- !u!135 &3006381195576189510
 SphereCollider:
   m_ObjectHideFlags: 0
