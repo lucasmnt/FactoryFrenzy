@@ -116,4 +116,9 @@ public class Player : MonoBehaviour, IPlayable
     {
         return this.hasFinished;
     }
+
+    public Transform GetPlayerTransform()
+    {
+        return this.gameObject.transform;
+    }
 }

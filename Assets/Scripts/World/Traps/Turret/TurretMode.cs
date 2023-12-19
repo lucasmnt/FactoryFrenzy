@@ -11,13 +11,12 @@ public class TurretMode : MonoBehaviour
     public Transform head, barrel;
     public GameObject _projectile;
     public float fireRate, nextFire;
-    // Start is called before the first frame update
+
     void Start()
     {
         _Player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
         dist = Vector3.Distance(_Player.position, transform.position);

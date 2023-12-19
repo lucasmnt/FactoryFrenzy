@@ -15,18 +15,6 @@ public class FallingBoxDetection : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other)
-        {
-            // Check if the hit object implements the IInteractable interface
-            IPlayable player = other.GetComponent<IPlayable>();
-            if (player!=null)
-            {
-                player.Fell();
-            }
-        }
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -34,6 +22,19 @@ public class FallingBoxDetection : MonoBehaviour
         {
             // Check if the hit object implements the IInteractable interface
             IPlayable player = collision.collider.GetComponent<IPlayable>();
+            if (player!=null)
+            {
+                player.Fell();
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other)
+        {
+            // Check if the hit object implements the IInteractable interface
+            IPlayable player = other.GetComponent<IPlayable>();
             if (player!=null)
             {
                 player.Fell();
