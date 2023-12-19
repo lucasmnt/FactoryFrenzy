@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class FallingBoxDetection : MonoBehaviour
 {
+    [SerializeField]
+    private float minHeight = -20f; // Hauteur minimale permise
+
+    private Transform playerTransform;
+
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
+   
+    public void SetPlayer(Transform player)
     {
+        playerTransform = player;
+    }
 
+    private void Update()
+    {
+        if (playerTransform!=null)
+        {
+            transform.position=new Vector3(playerTransform.position.x, minHeight, playerTransform.position.z);
+        }
     }
 
 

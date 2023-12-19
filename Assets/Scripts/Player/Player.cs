@@ -10,21 +10,6 @@ public class Player : MonoBehaviour, IPlayable
     [SerializeField]
     public bool hasFinished = false;
 
-    [SerializeField, Range(0f, 100f)] 
-    public float interactionDistance = 0f;
-
-    [SerializeField, Range(0f, 5f)] 
-    private const float maxHoldTime = 2f; // temps maximum pour force max.
-
-    [SerializeField, Range(0f, 5f)] 
-    private float minDistance = 1f; // Set your minimum distance here
-
-    [SerializeField, Range(0f, 10f)] 
-    private float maxDistance = 5f; // Set your maximum distance here
-
-    [SerializeField, Range(0f, 100f)] 
-    private float itemRotationSpeed = 10f;
-
     [SerializeField, Range(0f, 200f)]
     private float heatlh = 200f;
 
@@ -37,9 +22,21 @@ public class Player : MonoBehaviour, IPlayable
     [SerializeField]
     private GameObject currentCheckpoint;
 
+    [SerializeField]
+    private GameObject fallingBoxDetectionPrefab;
+
     void Start()
     {
         this.startingCheckpoint = GameObject.FindGameObjectWithTag("Start");
+        SetupFallingBoxDetection();
+    }
+
+    private void SetupFallingBoxDetection()
+    {
+        float newY = transform.position.y-50;
+        // Instancier le FallingBoxDetection et le lier au joueur
+        GameObject fallingBoxDetection = Instantiate(fallingBoxDetectionPrefab, new Vector3(transform.position.x, newY, transform.position.z), Quaternion.identity);
+        fallingBoxDetection.GetComponent<FallingBoxDetection>().SetPlayer(transform);
     }
 
     void Update()
@@ -47,17 +44,7 @@ public class Player : MonoBehaviour, IPlayable
         #region Input
         if (Input.GetKeyDown(KeyCode.F))
         {
-            // Raycast from the main camera
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, interactionDistance, raycastLayerMask))
-            {
-                // Check if the hit object implements the IInteractable interface
-                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-                if (interactable != null)
-                {
-                    interactable.Interact();
-                }
-            }
+           
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

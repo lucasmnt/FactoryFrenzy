@@ -235,16 +235,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 3
   hasFinished: 0
-  interactionDistance: 0
-  minDistance: 1
-  maxDistance: 5
-  itemRotationSpeed: 10
   heatlh: 200
   raycastLayerMask:
     serializedVersion: 2
     m_Bits: 1
   startingCheckpoint: {fileID: 0}
   currentCheckpoint: {fileID: 0}
+  fallingBoxDetectionPrefab: {fileID: 5586942984346487159, guid: 36166b469a0e10c40adf933c63b9181e, type: 3}
 --- !u!114 &7752644924097403669
 MonoBehaviour:
   m_ObjectHideFlags: 0
