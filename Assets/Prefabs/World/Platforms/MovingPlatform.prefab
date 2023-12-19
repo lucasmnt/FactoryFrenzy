@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5533151850947836700}
   - component: {fileID: 1418824887044227364}
   m_Layer: 0
-  m_Name: Way
+  m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,10 +227,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 0
-  movementWay: 0
-  maxDistanceMoved: 15
-  moveSpeed: 1.5
-  detectionBox: {fileID: 6356809632880478117}
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  moveSpeed: 10
 --- !u!1 &3435080286450124576
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +245,7 @@ GameObject:
   - component: {fileID: 1420819099547274381}
   - component: {fileID: 7151059317744591048}
   m_Layer: 0
-  m_Name: Way1
+  m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
