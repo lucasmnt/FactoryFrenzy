@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoundManager : MonoBehaviour
 {
@@ -49,6 +50,7 @@ public class RoundManager : MonoBehaviour
         {
             Debug.Log("Le round est terminé !");
             this.roundEnding=true;
+            SceneManager.LoadScene("HubMenu");
         }
     }
 }

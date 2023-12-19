@@ -108,4 +108,9 @@ public class Player : MonoBehaviour, IPlayable
     {
         return this.gameObject.transform;
     }
+
+    public string GetPlayerNumberToString()
+    {
+        return this.playerNumber.ToString();
+    }
 }
