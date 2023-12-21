@@ -497,6 +497,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 216328576614843181, guid: a43eb1a0f7f829c4fa0cc6e2b2a1160b, type: 3}
+      propertyPath: startingCheckpoint
+      value: 
+      objectReference: {fileID: 493466530}
+    - target: {fileID: 216328576614843181, guid: a43eb1a0f7f829c4fa0cc6e2b2a1160b, type: 3}
       propertyPath: raycastLayerMask.m_Bits
       value: 1
       objectReference: {fileID: 0}

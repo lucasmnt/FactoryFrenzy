@@ -1,42 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField]
-    public MovementType movementType = MovementType.Horizontal;
+    public enum MovementType
+    {
+        Loop,
+        PingPong
+    }
 
     [SerializeField]
-    public MovementWay movementWay = MovementWay.Normal;
+    public MovementType movementType = MovementType.Loop;
 
     [SerializeField]
-    public float maxDistanceMoved = 15;
+    public List<Transform> waypoints = new List<Transform>();
 
     [SerializeField]
-    public float moveSpeed = 5;
+    public float moveSpeed = 5f;
 
     [SerializeField]
     public BoxCollider detectionBox;
 
-
-    private Vector3 originalPosition;
-    private Vector3 previousPosition;
-
-    void Start()
-    {
-        originalPosition=transform.position;
-        previousPosition=originalPosition;
-    }
+    Vector3 previousPosition;
+    private int currentWaypointIndex = 0;
+    private int direction = 1; // 1: Forward, -1: Backward
 
     void Update()
     {
+        previousPosition=transform.position;
         MovePlatform();
         DetectPlayableObjects();
-
-        // Update the previous position
-        previousPosition=transform.position;
     }
 
     void DetectPlayableObjects()
@@ -59,47 +53,30 @@ public class MovingPlatform : MonoBehaviour
 
     void MovePlatform()
     {
-        switch (movementType)
+        if (waypoints.Count == 0)
+            return;
+
+        Transform targetWaypoint = waypoints[currentWaypointIndex];
+
+        float step = moveSpeed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, step);
+
+        if (transform.position == targetWaypoint.position)
         {
-            case MovementType.Horizontal:
-                if(movementWay == MovementWay.Normal)
+            // Change the current waypoint index based on movement type
+            if (movementType == MovementType.Loop)
+            {
+                currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+            }
+            else if (movementType == MovementType.PingPong)
+            {
+                currentWaypointIndex += direction;
+
+                if (currentWaypointIndex == waypoints.Count - 1 || currentWaypointIndex == 0)
                 {
-                    float horizontalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
-                    break;
+                    direction *= -1; // Reverse the direction at endpoints
                 }
-                else
-                {
-                    float horizontalOffset = - Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(horizontalOffset, 0, 0);
-                    break;
-                }
-            case MovementType.Vertical:
-                if (movementWay==MovementWay.Normal)
-                {
-                    float verticalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
-                    break;
-                }
-                else
-                {
-                    float verticalOffset = - Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(0, verticalOffset, 0);
-                    break;
-                }
-            case MovementType.Diagonal:
-                if (movementWay==MovementWay.Normal)
-                {
-                    float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
-                    break;
-                }
-                else
-                {
-                    float diagonalOffset = Mathf.Cos(Time.time*moveSpeed)*maxDistanceMoved;
-                    transform.position=originalPosition+new Vector3(diagonalOffset, diagonalOffset, 0);
-                    break;
-                }
+            }
         }
     }
 }
