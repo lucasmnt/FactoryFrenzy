@@ -26,6 +26,11 @@ public class MovingPlatform : MonoBehaviour
     private int currentWaypointIndex = 0;
     private int direction = 1; // 1: Forward, -1: Backward
 
+    private void Start()
+    {
+        detectionBox = GetComponentInChildren<BoxCollider>();
+    }
+
     void Update()
     {
         previousPosition=transform.position;

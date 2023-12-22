@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8084224859268848327}
   - component: {fileID: 5533151850947836700}
   - component: {fileID: 1418824887044227364}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 8301358229107725470}
   - component: {fileID: 3187483759637407257}
   - component: {fileID: 164411470757207103}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MovingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,9 +138,9 @@ Transform:
   m_LocalScale: {x: 15, y: 1, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2629407997992940851}
   - {fileID: 7834479392624524642}
   - {fileID: 1046326717757125646}
-  - {fileID: 2629407997992940851}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2527665203025032042
@@ -232,6 +232,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   moveSpeed: 10
+  detectionBox: {fileID: 0}
 --- !u!1 &3435080286450124576
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +245,7 @@ GameObject:
   - component: {fileID: 6587019451780210816}
   - component: {fileID: 1420819099547274381}
   - component: {fileID: 7151059317744591048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -347,7 +348,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2629407997992940851}
   - component: {fileID: 6356809632880478117}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DetectionBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

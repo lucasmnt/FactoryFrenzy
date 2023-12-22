@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1876437839576877100}
   - component: {fileID: -7789952601788413448}
   - component: {fileID: 5287949066146574868}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EndingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,3 +144,4 @@ MonoBehaviour:
   numberOfPlayers: 1
   timeOfRound: 300
   arrivalList: 
+  roundEnding: 0
