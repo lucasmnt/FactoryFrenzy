@@ -50,7 +50,7 @@ public class RoundManager : MonoBehaviour
         {
             Debug.Log("Le round est terminé !");
             this.roundEnding=true;
-            SceneManager.LoadScene("HubMenu");
+            //SceneManager.LoadScene("HubMenu");
         }
     }
 }

@@ -93,6 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 823699870147197415}
   - component: {fileID: 6511081197583020682}
+  - component: {fileID: 8208334741912027618}
+  - component: {fileID: -5875624786697837567}
   - component: {fileID: 6459242927417904641}
   m_Layer: 0
   m_Name: ven
@@ -142,6 +144,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8208334741912027618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888600497750151681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 678905736
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &-5875624786697837567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888600497750151681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 6511081197583020682}
 --- !u!114 &6459242927417904641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +191,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba7a8f6462d707e4c8300ced1b79441b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objTransform: {fileID: 0}
+  xPos: 0
+  yPos: 0
+  zPos: 0
+  xRot: 0
+  yRot: 0
+  ZRot: 0
+  xSca: 0
+  ySca: 0
+  zSca: 0
   anim: {fileID: 0}
   isBlowing: 1
   windDirection: {x: 1, y: 0, z: 0}

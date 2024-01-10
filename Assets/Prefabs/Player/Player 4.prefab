@@ -260,3 +260,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 1
+  playerCam: {fileID: 0}
+  camHolder: {fileID: 0}
+  camOffset: {x: 0, y: 0, z: 0}

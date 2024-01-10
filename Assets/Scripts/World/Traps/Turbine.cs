@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turbine : MonoBehaviour
+public class Turbine : EditorObjects
 {
     [SerializeField]
     public Animation anim;
