@@ -1,16 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movement : NetworkBehaviour
 {
     public float speed = 5f;
     public float sensitivity = 2f;
     public float jumpForce = 5f;
     public LayerMask groundMask;
 
+    public Camera playerCam;
+    public GameObject camHolder;
+    public Vector3 camOffset;
+
     private Rigidbody rb;
     private bool isGrounded;
+
+    public override void OnNetworkSpawn()
+    {
+        camHolder.SetActive(IsOwner);
+        base.OnNetworkSpawn(); 
+    }
+    /*public override void OnStartAuthority()
+    {
+        camHolder.SetActive(true);
+    }*/
 
     private void Start()
     {
@@ -59,12 +74,13 @@ public class Movement : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         transform.Rotate(Vector3.up*mouseX*sensitivity);
-        Camera.main.transform.Rotate(Vector3.left*mouseY*sensitivity);
+        playerCam.transform.Rotate(Vector3.left*mouseY*sensitivity);
+        //camHolder.transform.position = camHolder.transform.position + camOffset;
 
         // Clamp vertical camera rotation to prevent flipping
-        Quaternion currentRotation = Camera.main.transform.localRotation;
+        Quaternion currentRotation = playerCam.transform.localRotation;
         float clampedXRotation = Mathf.Clamp(currentRotation.x, -0.59f, 0.59f);
         currentRotation=new Quaternion(clampedXRotation, currentRotation.y, currentRotation.z, currentRotation.w);
-        Camera.main.transform.localRotation=currentRotation;
+        playerCam.transform.localRotation=currentRotation;
     }
 }

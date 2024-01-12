@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class EditorObjects : MonoBehaviour
+public class EditorObjects : NetworkBehaviour
 {
     public Transform objTransform;
     public float xPos, yPos, zPos;
