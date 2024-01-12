@@ -25,7 +25,7 @@ public class Barrel : EditorObjects
     // Méthode pour attribuer l'autorité au client local
     public void AssignAuthorityToClient()
     {
-        if (IsServer) // Assurez-vous que le script est exécuté sur le serveur
+        /*if (IsServer) // Assurez-vous que le script est exécuté sur le serveur
         {
             NetworkObject networkObject = GetComponent<NetworkObject>();
 
@@ -34,6 +34,6 @@ public class Barrel : EditorObjects
                 // Attribution de l'autorité au serveur
                 networkObject.AssignClientAuthority(NetworkManager.Singleton.LocalClientId);
             }
-        }
+        }*/
     }
 }
