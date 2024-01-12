@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a038ce4879889834684305ee75545a2c, type: 3}
       propertyPath: m_Name
-      value: perso01_2 (1)
+      value: lux
       objectReference: {fileID: 0}
     - target: {fileID: 5684994009406868000, guid: a038ce4879889834684305ee75545a2c, type: 3}
       propertyPath: m_ReceiveShadows
