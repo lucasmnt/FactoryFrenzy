@@ -340,6 +340,10 @@ MonoBehaviour:
   playerCam: {fileID: 1456879995434684311}
   camHolder: {fileID: 2764814453067094839}
   camOffset: {x: 0, y: 0.65, z: 0}
+  interactLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  interactRange: 5
 --- !u!114 &4042979129245511264
 MonoBehaviour:
   m_ObjectHideFlags: 0
