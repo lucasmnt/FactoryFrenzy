@@ -11,22 +11,31 @@ public class Movement : NetworkBehaviour
     public LayerMask groundMask;
 
     public Camera playerCam;
-    public GameObject camHolder;
+    public GameObject camHolder1st;
+    public GameObject camHolder3rd;
     public Vector3 camOffset;
+    public float cameraSwitchSpeed = 5f;
+    public PlayerPOV currentPOV = PlayerPOV.ThirdPerson;
 
     private Rigidbody rb;
     private bool isGrounded;
 
     [SerializeField]
     public LayerMask interactLayerMask;
-    public float interactRange = 5f;
+    public float interactRange = 10f;
 
-
-
+    public enum PlayerPOV
+    {
+        FirstPerson,
+        ThirdPerson,
+        External,
+        Cinematic
+    }
 
     public override void OnNetworkSpawn()
     {
-        camHolder.SetActive(IsOwner);
+        camHolder1st.SetActive(false);
+        camHolder3rd.SetActive(IsOwner);
         base.OnNetworkSpawn(); 
     }
 
@@ -34,7 +43,22 @@ public class Movement : NetworkBehaviour
     {
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
-        rb.freezeRotation = true; // Freeze rotation to prevent camera tilting
+        rb.freezeRotation = true;
+
+        if (IsLocalPlayer)
+        {
+            // Activer les caméras seulement pour le joueur local
+            playerCam.gameObject.SetActive(true);
+            camHolder1st.SetActive(true);
+            camHolder3rd.SetActive(true);
+        }
+        else
+        {
+            // Désactiver les caméras pour les joueurs distants
+            playerCam.gameObject.SetActive(false);
+            camHolder1st.SetActive(false);
+            camHolder3rd.SetActive(false);
+        }
     }
 
     private void Update()
@@ -44,6 +68,7 @@ public class Movement : NetworkBehaviour
         HandlePlayerJump();
         HandlePlayerLook();
         HandleTryInteract();
+        HandleCameraSwitching();
     }
 
     private void CheckGrounded()
@@ -60,6 +85,23 @@ public class Movement : NetworkBehaviour
 
         Vector3 movement = transform.forward*vertical+transform.right*horizontal;
         rb.velocity=new Vector3(movement.x*speed, rb.velocity.y, movement.z*speed);
+    }
+
+    private void HandleCameraSwitching()
+    {
+        if (!IsOwner) return;  // Seul le propriétaire devrait gérer le changement de caméra
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            // Inversez l'état entre première personne et troisième personne
+            currentPOV=(currentPOV==PlayerPOV.FirstPerson) ? PlayerPOV.ThirdPerson : PlayerPOV.FirstPerson;
+
+            // Définir la position cible en fonction de l'état actuel
+            Vector3 targetPosition = (currentPOV==PlayerPOV.FirstPerson) ? camHolder1st.transform.position : camHolder3rd.transform.position;
+
+            // Commencer la transition de caméra en ajustant directement la position
+            playerCam.transform.position=targetPosition;
+        }
     }
 
     private void HandlePlayerJump()
@@ -79,7 +121,6 @@ public class Movement : NetworkBehaviour
 
         transform.Rotate(Vector3.up*mouseX*sensitivity);
         playerCam.transform.Rotate(Vector3.left*mouseY*sensitivity);
-        //camHolder.transform.position = camHolder.transform.position + camOffset;
 
         // Clamp vertical camera rotation to prevent flipping
         Quaternion currentRotation = playerCam.transform.localRotation;

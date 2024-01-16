@@ -23,7 +23,7 @@ public class Bouton : NetworkBehaviour, IInteractable
     // Méthode pour tenter d'interagir avec le bouton
     private void TryInteractWithButton()
     {
-        // Créez un rayon depuis la caméra vers l'avant
+        /*// Créez un rayon depuis la caméra vers l'avant
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -36,6 +36,6 @@ public class Bouton : NetworkBehaviour, IInteractable
                 // Appel à la méthode Interact si le bouton est touché
                 Interact();
             }
-        }
+        }*/
     }
 }

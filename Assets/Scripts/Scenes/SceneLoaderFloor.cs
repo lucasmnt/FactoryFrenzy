@@ -9,24 +9,13 @@ public class SceneLoaderFloor : NetworkBehaviour
     public UnitySceneManager unitySceneManager;
     public string sceneToLoadName;
 
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         IPlayable player = other.GetComponent<IPlayable>();
         if (player!=null)
         {
-            NetworkManager.SceneManager.LoadScene(sceneToLoadName, LoadSceneMode.Single);
-            //unitySceneManager.LoadSceneWithName(sceneToLoadName);
+            //NetworkManager.SceneManager.LoadScene(sceneToLoadName, LoadSceneMode.Single);
+             unitySceneManager.LoadSceneWithName(sceneToLoadName);
         }
     }
 
@@ -35,8 +24,8 @@ public class SceneLoaderFloor : NetworkBehaviour
         IPlayable player = collision.collider.GetComponent<IPlayable>();
         if (player!=null)
         {
-            NetworkManager.SceneManager.LoadScene(sceneToLoadName, LoadSceneMode.Single);
-            //unitySceneManager.LoadSceneWithName(sceneToLoadName);
+            //NetworkManager.SceneManager.LoadScene(sceneToLoadName, LoadSceneMode.Single);
+            unitySceneManager.LoadSceneWithName(sceneToLoadName);
         }
     }
 }
