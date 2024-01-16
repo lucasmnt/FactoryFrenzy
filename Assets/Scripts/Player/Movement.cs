@@ -17,15 +17,18 @@ public class Movement : NetworkBehaviour
     private Rigidbody rb;
     private bool isGrounded;
 
+    [SerializeField]
+    public LayerMask interactLayerMask;
+    public float interactRange = 5f;
+
+
+
+
     public override void OnNetworkSpawn()
     {
         camHolder.SetActive(IsOwner);
         base.OnNetworkSpawn(); 
     }
-    /*public override void OnStartAuthority()
-    {
-        camHolder.SetActive(true);
-    }*/
 
     private void Start()
     {
@@ -40,6 +43,7 @@ public class Movement : NetworkBehaviour
         HandlePlayerMovement();
         HandlePlayerJump();
         HandlePlayerLook();
+        HandleTryInteract();
     }
 
     private void CheckGrounded()
@@ -82,5 +86,26 @@ public class Movement : NetworkBehaviour
         float clampedXRotation = Mathf.Clamp(currentRotation.x, -0.59f, 0.59f);
         currentRotation=new Quaternion(clampedXRotation, currentRotation.y, currentRotation.z, currentRotation.w);
         playerCam.transform.localRotation=currentRotation;
+    }
+
+    private void HandleTryInteract()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // Créez un rayon depuis la caméra vers l'avant
+            Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
+            RaycastHit hit;
+
+            // Vérifiez s'il y a une collision avec un objet portant l'interface IInteractable
+            if (Physics.Raycast(ray, out hit, interactRange, interactLayerMask))
+            {
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+                if (interactable!=null)
+                {
+                    // Appel à la méthode Interact de l'objet
+                    interactable.Interact();
+                }
+            }
+        }
     }
 }
