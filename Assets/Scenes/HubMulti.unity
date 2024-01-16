@@ -557,6 +557,14 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1394843578
       objectReference: {fileID: 0}
+    - target: {fileID: 88458698965866266, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3309096048
+      objectReference: {fileID: 0}
+    - target: {fileID: 88458698965866266, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1394843578
+      objectReference: {fileID: 0}
     - target: {fileID: 3188682688691755711, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1981875247
@@ -621,11 +629,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4841075176279134330, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2945837570
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841075176279134330, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1394843578
+      objectReference: {fileID: 0}
     - target: {fileID: 6007004047243296606, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 246313679
       objectReference: {fileID: 0}
     - target: {fileID: 6007004047243296606, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1394843578
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314148057780540806, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3229111209
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314148057780540806, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1394843578
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106565851829731477, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2149283674
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106565851829731477, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1394843578
       objectReference: {fileID: 0}

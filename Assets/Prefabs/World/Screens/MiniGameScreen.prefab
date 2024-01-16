@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 8392375567026988932}
   - component: {fileID: 2453678409218817963}
   - component: {fileID: 2242501494771155162}
+  - component: {fileID: 5648579133333505598}
   m_Layer: 0
   m_Name: MiniGameScreen
   m_TagString: Untagged
@@ -469,6 +470,27 @@ MonoBehaviour:
   minValue: 1
   enable: 0
   typeOfParameters: 0
+--- !u!114 &5648579133333505598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589232711405800372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 685920378
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &726426444434315474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -479,7 +501,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7820019042035503391, guid: c930f6e7751487247a4cef1eeaa7ee0a, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2856219209
+      value: 3702083741
       objectReference: {fileID: 0}
     - target: {fileID: -7820019042035503391, guid: c930f6e7751487247a4cef1eeaa7ee0a, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash

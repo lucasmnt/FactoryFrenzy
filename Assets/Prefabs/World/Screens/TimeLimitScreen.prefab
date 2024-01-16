@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5041339421252459065}
   - component: {fileID: 3633824506942506442}
   - component: {fileID: 1626304307438958367}
+  - component: {fileID: 1873921008635631993}
   m_Layer: 0
   m_Name: TimeLimitScreen
   m_TagString: Untagged
@@ -127,6 +128,27 @@ MonoBehaviour:
   minValue: 1
   enable: 0
   typeOfParameters: 1
+--- !u!114 &1873921008635631993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2764417015591047472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1365155043
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &3734627147988759274
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4135481488441953485, guid: 2231d98f67048bf44aa1b76b0197fc2b, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 960299253
+      value: 4149497199
       objectReference: {fileID: 0}
     - target: {fileID: 4135481488441953485, guid: 2231d98f67048bf44aa1b76b0197fc2b, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash

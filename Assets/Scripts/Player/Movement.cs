@@ -84,7 +84,17 @@ public class Movement : NetworkBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         Vector3 movement = transform.forward*vertical+transform.right*horizontal;
-        rb.velocity=new Vector3(movement.x*speed, rb.velocity.y, movement.z*speed);
+
+        // Si votre Rigidbody est cinématique, utilisez directement la fonction Translate
+        if (rb.isKinematic)
+        {
+            transform.Translate(movement*speed*Time.deltaTime);
+        }
+        else
+        {
+            // Sinon, utilisez la vélocité seulement pour les corps non cinématiques
+            rb.velocity=new Vector3(movement.x*speed, rb.velocity.y, movement.z*speed);
+        }
     }
 
     private void HandleCameraSwitching()
