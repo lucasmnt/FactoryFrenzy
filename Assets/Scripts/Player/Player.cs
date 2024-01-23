@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPlayable
+public class Player : NetworkBehaviour, IPlayable
 {
     [SerializeField]
     public PlayerNumber playerNumber;

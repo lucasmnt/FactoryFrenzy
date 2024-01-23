@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Trampoline : MonoBehaviour
+public class Trampoline : EditorObjects
 {
     public float jumpForce = 10f; // Force de saut du trampoline
 

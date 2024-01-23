@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class Launcher : EditorObjects
@@ -23,10 +21,14 @@ public class Launcher : EditorObjects
     public float lockedTime = 5f;
     public float inactiveTime = 2f;
     public float maxTargetDistance = 30f;
+    public bool isShooting = false;
 
     // Variable to store the current state
     private LauncherState currentState = LauncherState.Inactive;
     private float stateChangeTime;
+
+    // List to store potential targets
+    private List<Transform> potentialTargets = new List<Transform>();
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +56,7 @@ public class Launcher : EditorObjects
     {
         // Vérifier la distance avant de verrouiller
         float playerDistance = Vector3.Distance(transform.position, player.GetPlayerTransform().position);
-        if (playerDistance <= maxTargetDistance)
+        if (playerDistance<=maxTargetDistance)
         {
             _Player=player.GetPlayerTransform();
         }
@@ -79,13 +81,15 @@ public class Launcher : EditorObjects
                 if (Time.time-stateChangeTime>=inactiveTime)
                 {
                     currentState=LauncherState.LookingForTarget;
+                    stateChangeTime=Time.time;
                 }
                 break;
 
             case LauncherState.LookingForTarget:
                 // Check conditions to transition to ShootingAtTarget state
-                if (lockedPlayer)
+                if (potentialTargets.Count>0)
                 {
+                    _Player=GetClosestTarget();
                     currentState=LauncherState.ShootingAtTarget;
                     stateChangeTime=Time.time;
                 }
@@ -97,6 +101,8 @@ public class Launcher : EditorObjects
                 {
                     currentState=LauncherState.Inactive;
                     stateChangeTime=Time.time;
+                    lockedPlayer=false;
+                    potentialTargets.Clear(); // Clear the list when transitioning to Inactive state
                 }
                 else
                 {
@@ -109,6 +115,7 @@ public class Launcher : EditorObjects
                     }
                 }
                 break;
+
         }
     }
 
@@ -124,8 +131,48 @@ public class Launcher : EditorObjects
                 {
                     LockPlayer(player);
                     lockedPlayer=true;
+                    potentialTargets.Add(player.GetPlayerTransform()); // Add the player to the list of potential targets
                 }
             }
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!lockedPlayer)
+        {
+            if (other)
+            {
+                // Check if the hit object implements the IInteractable interface
+                IPlayable player = other.GetComponent<IPlayable>();
+                if (player!=null)
+                {
+                    LockPlayer(player);
+                    lockedPlayer=true;
+                    if (!potentialTargets.Contains(player.GetPlayerTransform()))
+                    {
+                        potentialTargets.Add(player.GetPlayerTransform()); // Add the player to the list of potential targets if not already in the list
+                    }
+                }
+            }
+        }
+    }
+
+    private Transform GetClosestTarget()
+    {
+        Transform closestTarget = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Transform target in potentialTargets)
+        {
+            float distance = Vector3.Distance(transform.position, target.position);
+            if (distance<closestDistance)
+            {
+                closestDistance=distance;
+                closestTarget=target;
+            }
+        }
+
+        return closestTarget;
     }
 }
