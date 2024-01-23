@@ -1,11 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Movement : NetworkBehaviour
+public class MovementSolo : MonoBehaviour
 {
     public float speed = 5f;
     public float sensitivity = 2f;
@@ -41,51 +37,23 @@ public class Movement : NetworkBehaviour
         Cinematic
     }
 
-    public override void OnNetworkSpawn()
-    {
-        camHolder1st.SetActive(false);
-        camHolder3rd.SetActive(IsOwner);
-        base.OnNetworkSpawn(); 
-    }
-
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb=GetComponent<Rigidbody>();
         animator=GetComponent<Animator>();
-        Cursor.lockState = CursorLockMode.Locked;
-        rb.freezeRotation = true;
+        Cursor.lockState=CursorLockMode.Locked;
+        rb.freezeRotation=true;
 
-        // Vérifier si le jeu est en mode hors ligne (pas de réseau)
-        if (!NetworkManager.Singleton.IsServer)
-        {
-            // Activer les caméras pour tous les joueurs en mode hors ligne
-            playerCam.gameObject.SetActive(true);
-            camHolder1st.SetActive(true);
-            camHolder3rd.SetActive(true);
-        }
-        else
-        {
-            // Si le jeu est en mode réseau, activer les caméras uniquement pour le joueur local
-            if (IsLocalPlayer)
-            {
-                playerCam.gameObject.SetActive(true);
-                camHolder1st.SetActive(true);
-                camHolder3rd.SetActive(true);
-            }
-            else
-            {
-                playerCam.gameObject.SetActive(false);
-                camHolder1st.SetActive(false);
-                camHolder3rd.SetActive(false);
-            }
-        }
+        playerCam.gameObject.SetActive(true);
+        camHolder1st.SetActive(true);
+        camHolder3rd.SetActive(true);
     }
 
     private void Update()
     {
         CheckGrounded();
         HandlePlayerWriting();
-        if (isWriting == false)
+        if (isWriting==false)
         {
             HandlePlayerMovement();
             HandlePlayerJump();
@@ -114,11 +82,11 @@ public class Movement : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Créez un rayon depuis la caméra vers l'avant
+            // Create a ray from the camera forward
             Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
             RaycastHit hit;
 
-            // Vérifiez s'il y a une collision avec un objet portant l'interface IInteractable
+            // Check for collision with an object implementing the IInteractable interface
             if (Physics.Raycast(ray, out hit, interactRange, interactLayerMask))
             {
                 IWritable writable = hit.collider.GetComponent<IWritable>();
@@ -142,52 +110,40 @@ public class Movement : NetworkBehaviour
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            // Vérifiez si la touche "Shift" est enfoncée pour courir
-            bool isRunning = Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift);
-
-            // Déterminez la vitesse actuelle en fonction de la marche ou de la course
-            float currentSpeed = isRunning ? (speed*1.2f) : speed;
-
             Vector3 movement = transform.forward*vertical+transform.right*horizontal;
-
-            // Définissez le paramètre "Speed" de l'Animator en fonction de la vitesse
-            animator.SetFloat("Speed", currentSpeed);
 
             if (rb.isKinematic)
             {
-                transform.Translate(movement*currentSpeed*Time.deltaTime);
+                transform.Translate(movement*speed*Time.deltaTime);
+                // Déclencher l'animation de marche
+                animator.SetFloat("Speed", movement.magnitude);
             }
             else
             {
-                rb.velocity=new Vector3(movement.x*currentSpeed, rb.velocity.y, movement.z*currentSpeed);
+                rb.velocity=new Vector3(movement.x*speed, rb.velocity.y, movement.z*speed);
+                // Déclencher l'animation de marche
+                animator.SetFloat("Speed", rb.velocity.magnitude);
             }
         }
     }
 
     private void HandleCameraSwitching()
     {
-        // Vérifiez si le jeu est en mode multijoueur ou hors ligne
-        if (NetworkManager.Singleton!=null&&!IsOwner)
-        {
-            // Seul le propriétaire devrait gérer le changement de caméra en mode multijoueur
-            return;
-        }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // Inversez l'état entre première personne et troisième personne
+            // Invert the state between first person and third person
             currentPOV=(currentPOV==PlayerPOV.FirstPerson) ? PlayerPOV.ThirdPerson : PlayerPOV.FirstPerson;
 
-            // Définir la position cible en fonction de l'état actuel
+            // Set the target position based on the current state
             Vector3 targetPosition = (currentPOV==PlayerPOV.FirstPerson) ? camHolder1st.transform.position : camHolder3rd.transform.position;
 
-            // Commencer la transition de caméra en ajustant directement la position
+            // Start the camera transition by adjusting the position directly
             playerCam.transform.position=targetPosition;
         }
     }
 
     private void HandlePlayerJump()
     {
-        // Player Jump
         if (isGrounded&&Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up*jumpForce, ForceMode.Impulse);
@@ -214,17 +170,17 @@ public class Movement : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Créez un rayon depuis la caméra vers l'avant
+            // Create a ray from the camera forward
             Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
             RaycastHit hit;
 
-            // Vérifiez s'il y a une collision avec un objet portant l'interface IInteractable
+            // Check for collision with an object implementing the IInteractable interface
             if (Physics.Raycast(ray, out hit, interactRange, interactLayerMask))
             {
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                 if (interactable!=null)
                 {
-                    // Appel à la méthode Interact de l'objet
+                    // Call the Interact method of the object
                     interactable.Interact();
                 }
             }
