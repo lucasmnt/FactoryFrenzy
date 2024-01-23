@@ -280,6 +280,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491cc36d7cd0305468f14aceae0cf91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objTransform: {fileID: 0}
+  xPos: 0
+  yPos: 0
+  zPos: 0
+  xRot: 0
+  yRot: 0
+  ZRot: 0
+  xSca: 0
+  ySca: 0
+  zSca: 0
   movementType: 0
   waypoints:
   - {fileID: 0}
@@ -418,8 +428,8 @@ Transform:
   m_GameObject: {fileID: 3481545760984293568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.9, z: 0}
+  m_LocalScale: {x: 1, y: 3.4979, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1669047077580048507}
