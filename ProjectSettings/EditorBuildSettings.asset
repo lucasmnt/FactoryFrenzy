@@ -21,6 +21,11 @@ EditorBuildSettings:
     path: Assets/Sandbox/Lucas/TESTUNITA 2.unity
     guid: cd3e20eaa2b16244ebc22ecc6b453ca1
   - enabled: 1
+<<<<<<< HEAD
+    path: Assets/Sandbox/Aldryck/map01.unity
+    guid: e0296769f73577f4f90a43e8d43620eb
+=======
     path: Assets/Sandbox/Lucas/NewCharacter.unity
     guid: 4002bad8303e75743afa92779b4808f8
+>>>>>>> b2c4be9ab323f631b998685128994946c4b87542
   m_configObjects: {}

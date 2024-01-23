@@ -73,7 +73,7 @@ public class FallingPlatform : EditorObjects
         while (elapsedTime<1f)
         {
             transform.position=Vector3.Lerp(initialPosition, targetPosition, elapsedTime);
-            elapsedTime+=Time.deltaTime*2f; // Contrôlez la vitesse de descente ici
+            elapsedTime+=Time.deltaTime*2f; // Contrï¿½lez la vitesse de descente ici
             yield return null;
         }
 
