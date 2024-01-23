@@ -9,12 +9,6 @@ public class FallingBoxDetection : MonoBehaviour
 
     private Transform playerTransform;
 
-    void Start()
-    {
-
-    }
-
-   
     public void SetPlayer(Transform player)
     {
         playerTransform = player;

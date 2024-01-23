@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class RoundManager : MonoBehaviour
 {
     [SerializeField]
-    public int numberOfPlayers = 1;
+    public int numberOfPlayers = 0;
 
     [SerializeField]
     public float timeOfRound = 300f;
@@ -16,6 +17,8 @@ public class RoundManager : MonoBehaviour
 
     [SerializeField]
     public bool roundEnding = false;
+
+    private bool timerActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,10 +32,29 @@ public class RoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!roundEnding)
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            UpdateNumberOfPlayers();
+        }
+
+        CheckForArrival();
+
+        if (roundEnding)
         {
             EndRound();
         }
+    }
+
+    public int GetNumberOfPlayers()
+    {
+        return this.numberOfPlayers;
+    }
+
+    public void UpdateNumberOfPlayers()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        this.numberOfPlayers = players.Length;
+        Debug.Log(numberOfPlayers);
     }
 
     public void AddPlayerToArrivalList(PlayerNumber playerNumberToAdd)
@@ -46,11 +68,33 @@ public class RoundManager : MonoBehaviour
 
     public void EndRound()
     {
-        if (arrivalList.Count==numberOfPlayers)
+        StartTimer();
+    }
+    
+    public void CheckForArrival()
+    {
+        if (arrivalList.Count==numberOfPlayers && numberOfPlayers>=1)
         {
-            Debug.Log("Le round est terminé !");
             this.roundEnding=true;
-            //SceneManager.LoadScene("HubMenu");
         }
     }
+
+    void StartTimer()
+    {
+        if (!timerActive)
+        {
+            StartCoroutine(TimerCoroutine(10f));
+        }
+    }
+
+    IEnumerator TimerCoroutine(float time)
+    {
+        timerActive=true;
+        yield return new WaitForSeconds(time); // Attendre 10 secondes
+
+        // Faire un truc à la fin genre SceneManager.LoadScene("HubMenu");
+
+        timerActive=false;
+    }
 }
+

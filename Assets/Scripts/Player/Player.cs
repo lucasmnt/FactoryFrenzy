@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class Player : NetworkBehaviour, IPlayable
 {
+    //private NetworkVariable<PlayerData> playerDataVar;
+
+    PlayerData playerData = new PlayerData(new FixedString32Bytes("Roger"));
+
     [SerializeField]
     public PlayerNumber playerNumber;
 
@@ -28,7 +33,14 @@ public class Player : NetworkBehaviour, IPlayable
 
     void Start()
     {
-        this.startingCheckpoint = GameObject.FindGameObjectWithTag("Start");
+        //this.startingCheckpoint = GameObject.FindGameObjectWithTag("Start");
+        //SetupFallingBoxDetection();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        //playerDataVar=new NetworkVariable<PlayerData>(playerData, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        this.startingCheckpoint=GameObject.FindGameObjectWithTag("Start");
         SetupFallingBoxDetection();
     }
 
@@ -45,7 +57,7 @@ public class Player : NetworkBehaviour, IPlayable
         #region Input
         if (Input.GetKeyDown(KeyCode.F))
         {
-           
+            Debug.Log($"Data : PlayerName: {playerData.playerName}, HasFinished: {playerData.hasFinished}");
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -97,12 +109,14 @@ public class Player : NetworkBehaviour, IPlayable
     public PlayerNumber HasFinished()
     {
         this.hasFinished=true;
+        this.playerData.hasFinished=true;
         return this.playerNumber;
     }
 
     public bool GetFinishedState()
     {
         return this.hasFinished;
+        return this.playerData.hasFinished;
     }
 
     public Transform GetPlayerTransform()

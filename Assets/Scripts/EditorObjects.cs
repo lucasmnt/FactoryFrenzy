@@ -24,7 +24,7 @@ public class EditorObjects : NetworkBehaviour
         
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("collided !");
+            //Debug.Log("collided !");
             NetworkObject playerNO = collision.collider.GetComponent<NetworkObject>();
 
             if (playerNO == null)
@@ -42,7 +42,7 @@ public class EditorObjects : NetworkBehaviour
 
                 // Get the client ID of the player
                 
-                Debug.Log("Player Client ID: "+ playerClientId);
+                //Debug.Log("Player Client ID: "+ playerClientId);
             }
         }
     }

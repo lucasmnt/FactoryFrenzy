@@ -83,6 +83,8 @@ public class Movement : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         CheckGrounded();
         HandlePlayerWriting();
         if (isWriting == false)
@@ -102,12 +104,6 @@ public class Movement : NetworkBehaviour
 
         // Debug the raycast
         Debug.DrawRay(transform.position, Vector3.down*1.1f, isGrounded ? Color.green : Color.red);
-
-        // Optionally, you can log information about the hit point
-        if (isGrounded)
-        {
-            Debug.Log("Grounded at position: "+hit.point);
-        }
     }
 
     private void HandlePlayerWriting()
@@ -151,7 +147,7 @@ public class Movement : NetworkBehaviour
             Vector3 movement = transform.forward*vertical+transform.right*horizontal;
 
             // Définissez le paramètre "Speed" de l'Animator en fonction de la vitesse
-            animator.SetFloat("Speed", currentSpeed);
+            //animator.SetFloat("Speed", currentSpeed);
 
             if (rb.isKinematic)
             {
