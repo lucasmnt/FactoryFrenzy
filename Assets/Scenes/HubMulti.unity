@@ -565,6 +565,18 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1394843578
       objectReference: {fileID: 0}
+    - target: {fileID: 2406913065959944497, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 274110471
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740393265663005074, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 2740393265663005074, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3188682688691755711, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1981875247
@@ -637,6 +649,14 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1394843578
       objectReference: {fileID: 0}
+    - target: {fileID: 5064456016551244986, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 392390447
+      objectReference: {fileID: 0}
+    - target: {fileID: 5064456016551244986, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1394843578
+      objectReference: {fileID: 0}
     - target: {fileID: 6007004047243296606, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 246313679
@@ -682,7 +702,8 @@ PrefabInstance:
       value: GameBuilderManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2728761421130342188, guid: 435880f16a0ca00448164885b46ef902, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5295277077266985531, guid: 435880f16a0ca00448164885b46ef902, type: 3}
@@ -703,7 +724,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7708889986630450153, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5345846446385413525, guid: 435880f16a0ca00448164885b46ef902, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7468406876003901385, guid: 435880f16a0ca00448164885b46ef902, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 4478556094003189309, guid: 435880f16a0ca00448164885b46ef902, type: 3}

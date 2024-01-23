@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class TextUpdater : NetworkBehaviour
 {
@@ -24,6 +26,7 @@ public class TextUpdater : NetworkBehaviour
 
     void Start()
     {
+
     }
 
     // Function to update the text dynamically
