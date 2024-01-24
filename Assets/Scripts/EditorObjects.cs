@@ -38,10 +38,9 @@ public class EditorObjects : NetworkBehaviour
                 //this.NetworkObject.ChangeOwnership(playerNO.OwnerClientId);
 
                 ulong playerClientId = playerNO.OwnerClientId;
-                RequestChangeOwnershipServerRpc(playerClientId);
+                //RequestChangeOwnershipServerRpc(playerClientId);
 
                 // Get the client ID of the player
-                
                 //Debug.Log("Player Client ID: "+ playerClientId);
             }
         }
@@ -53,7 +52,7 @@ public class EditorObjects : NetworkBehaviour
         // Get the NetworkObject of this object
         NetworkObject networkObject = GetComponent<NetworkObject>();
 
-        if (networkObject!=null)
+        if (networkObject!=null && IsServer)
         {
             // Change ownership on the server
             networkObject.ChangeOwnership(newOwnerClientId);

@@ -1,32 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class EndingPlatform : EditorObjects
 {
-    RoundManager roundManager;
-    // Start is called before the first frame update
+    public RoundManager roundManager;
+
     void Start()
     {
-        roundManager = GetComponent<RoundManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        roundManager=GetComponent<RoundManager>();
+        GetComponent<NetworkObject>().RemoveOwnership();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other)
+        if (other!=null)
         {
             // Check if the hit object implements the IInteractable interface
-            IPlayable player = other.GetComponent<IPlayable>();
-            if (player!=null)
+            IPlayable player;
+            if (other.TryGetComponent(out player))
             {
-                if(player.GetFinishedState()==false)
+                if (!player.GetFinishedState())
                 {
+                    // Call the ServerRpc to notify all clients
                     roundManager.AddPlayerToArrivalList(player.HasFinished());
                 }
             }
@@ -35,13 +32,13 @@ public class EndingPlatform : EditorObjects
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider)
+        if (collision.collider!=null)
         {
             // Check if the hit object implements the IInteractable interface
-            IPlayable player = collision.collider.GetComponent<IPlayable>();
-            if (player!=null)
+            IPlayable player;
+            if (collision.collider.TryGetComponent(out player))
             {
-                if (player.GetFinishedState()==false)
+                if (!player.GetFinishedState())
                 {
                     roundManager.AddPlayerToArrivalList(player.HasFinished());
                 }

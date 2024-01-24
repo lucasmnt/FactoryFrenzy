@@ -116,7 +116,7 @@ public class Player : NetworkBehaviour, IPlayable
     public bool GetFinishedState()
     {
         return this.hasFinished;
-        return this.playerData.hasFinished;
+        //return this.playerData.hasFinished;
     }
 
     public Transform GetPlayerTransform()

@@ -15,6 +15,8 @@ public class GameInfoText : MonoBehaviour
     [SerializeField]
     public TMP_Text textSource4;
     [SerializeField]
+    public TMP_Text textSource5;
+    [SerializeField]
     public TMP_Text combinedText;
 
     public bool validated = false;
@@ -44,6 +46,8 @@ public class GameInfoText : MonoBehaviour
         s = "Number of players : " + textSource2.text;
         combinedStringBuilder.AppendLine(s);
         s = "Time Limit : " + textSource3.text;
+        combinedStringBuilder.AppendLine(s);
+        s="Time Limit after win: "+textSource5.text;
         combinedStringBuilder.AppendLine(s);
         s = "Minigames : " + textSource4.text;
         combinedStringBuilder.AppendLine(s);

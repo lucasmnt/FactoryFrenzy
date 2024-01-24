@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class RoundManager : MonoBehaviour
+public class RoundManager : NetworkBehaviour
 {
+    public GameManager gm;
+
     [SerializeField]
     public int numberOfPlayers = 0;
 
@@ -18,7 +19,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField]
     public bool roundEnding = false;
 
-    private bool timerActive = false;
+    private bool timerActive = false;    
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,7 @@ public class RoundManager : MonoBehaviour
         this.arrivalList.Clear();
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         numberOfPlayers=players.Length;
+        GetComponent<NetworkObject>().RemoveOwnership();
     }
 
     // Update is called once per frame
@@ -61,7 +63,7 @@ public class RoundManager : MonoBehaviour
     {
         if (!arrivalList.Contains(playerNumberToAdd))
         {
-            Debug.Log(playerNumberToAdd+" has arrived");
+            //Debug.Log(OwnerClientId+" has arrived");
             this.arrivalList.Add(playerNumberToAdd);
         }
     }
@@ -94,7 +96,15 @@ public class RoundManager : MonoBehaviour
 
         // Faire un truc à la fin genre SceneManager.LoadScene("HubMenu");
 
+        Debug.Log("Finito");
         timerActive=false;
+    }
+
+    [ServerRpc]
+    public void ServerArrivalNotificationServerRpc(PlayerNumber playerNumberToAdd)
+    {
+        AddPlayerToArrivalList(playerNumberToAdd);
+        Debug.Log("rpclol");
     }
 }
 
