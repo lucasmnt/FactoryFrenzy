@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8208334741912027618}
   - component: {fileID: -5875624786697837567}
   - component: {fileID: 6459242927417904641}
+  - component: {fileID: 3729380967512750699}
   m_Layer: 0
   m_Name: ven
   m_TagString: Untagged
@@ -156,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 678905736
+  GlobalObjectIdHash: 1133217933
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -203,8 +204,31 @@ MonoBehaviour:
   zSca: 0
   anim: {fileID: 0}
   isBlowing: 1
-  windDirection: {x: 1, y: 0, z: 0}
+  windDirection: {x: 50, y: 0, z: 0}
   windStrength: 5
+--- !u!136 &3729380967512750699
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888600497750151681}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Height: 20
+  m_Direction: 0
+  m_Center: {x: -10, y: 0, z: 0}
 --- !u!1 &976425001419283287
 GameObject:
   m_ObjectHideFlags: 0

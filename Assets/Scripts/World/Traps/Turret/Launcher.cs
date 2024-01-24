@@ -23,6 +23,17 @@ public class Launcher : EditorObjects
     public float maxTargetDistance = 30f;
     public bool isShooting = false;
 
+    public float eulerXAdjustment = 0f;
+    public float eulerYAdjustment = 0f;
+    public float eulerZAdjustment = 0f;
+
+    public float xOffset = 0f;
+    public float yOffset = 0f;
+    public float zOffset = 0f;
+
+    public Animator targetObjectAnimator;
+    public string animationTriggerName  = "null";
+
     // Variable to store the current state
     private LauncherState currentState = LauncherState.Inactive;
     private float stateChangeTime;
@@ -47,14 +58,39 @@ public class Launcher : EditorObjects
 
     void Shoot()
     {
-        GameObject clone = Instantiate(_projectile, barrel.position, head.rotation);
-        clone.GetComponent<Rigidbody>().AddForce(head.forward*1500);
+        // Créez un quaternion avec la rotation initiale de head
+        Quaternion initialRotation = head.rotation;
+
+        // Modifiez la composante Y du quaternion en utilisant les ajustements d'angle
+        Quaternion modifiedRotation = Quaternion.Euler(
+            initialRotation.eulerAngles.x + eulerXAdjustment,
+            initialRotation.eulerAngles.y + eulerYAdjustment,
+            initialRotation.eulerAngles.z + eulerZAdjustment
+        );
+        
+        // Calculer la position du tir avec les décalages en X, Y et Z
+        Vector3 spawnPosition = barrel.position + barrel.right * xOffset + barrel.up * yOffset + barrel.forward * zOffset;
+
+        // Instanciez le projectile avec la nouvelle rotation et la nouvelle position
+        GameObject clone = Instantiate(_projectile, spawnPosition, modifiedRotation);
+
+        // Accédez à l'Animator de l'objet à animer
+        if (targetObjectAnimator != null)
+        {
+            Debug.Log("Trying to play animation: " + animationTriggerName);
+            targetObjectAnimator.Play(animationTriggerName, 0, 0.1f);
+        }
+
+        // Appliquez une force au projectile
+        clone.GetComponent<Rigidbody>().AddForce(head.forward * 1500);
+
+        // Détruisez le projectile après 10 secondes
         Destroy(clone, 10);
     }
 
     void LockPlayer(IPlayable player)
     {
-        // V�rifier la distance avant de verrouiller
+        // V�rifier la distance avant de verrouiller
         float playerDistance = Vector3.Distance(transform.position, player.GetPlayerTransform().position);
         if (playerDistance<=maxTargetDistance)
         {
