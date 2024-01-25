@@ -28,7 +28,7 @@ public class RoundManager : NetworkBehaviour
         this.arrivalList.Clear();
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         numberOfPlayers=players.Length;
-        GetComponent<NetworkObject>().RemoveOwnership();
+        //GetComponent<NetworkObject>().RemoveOwnership();
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class RoundManager : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            UpdateNumberOfPlayers();
+            UpdateNumberOfPlayersClientRpc();
         }
 
         CheckForArrival();
@@ -52,7 +52,8 @@ public class RoundManager : NetworkBehaviour
         return this.numberOfPlayers;
     }
 
-    public void UpdateNumberOfPlayers()
+    [ClientRpc]
+    public void UpdateNumberOfPlayersClientRpc()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         this.numberOfPlayers = players.Length;
@@ -98,13 +99,6 @@ public class RoundManager : NetworkBehaviour
 
         Debug.Log("Finito");
         timerActive=false;
-    }
-
-    [ServerRpc]
-    public void ServerArrivalNotificationServerRpc(PlayerNumber playerNumberToAdd)
-    {
-        AddPlayerToArrivalList(playerNumberToAdd);
-        Debug.Log("rpclol");
     }
 }
 

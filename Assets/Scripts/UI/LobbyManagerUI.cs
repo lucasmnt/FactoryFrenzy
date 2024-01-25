@@ -109,6 +109,17 @@ public class LobbyManagerUI : MonoBehaviour
                 // Assurez-vous d'avoir une référence à votre NetworkManager
                 NetworkManager networkManager = networkManagerRef.GetComponent<NetworkManager>();
 
+                // Si le joueur est l'hôte, lancez le serveur (Host)
+                //if (networkManager.IsHost)
+                //{
+                    StartHost();
+                //}
+                // Si le joueur est un client, lancez le client
+                //else
+                //{
+                //    StartClient();
+                //}
+
                 // Chargez la scène de jeu
                 // Utilisez le réseau pour gérer le chargement de la scène si nécessaire
                 networkManager.SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
@@ -208,17 +219,6 @@ public class LobbyManagerUI : MonoBehaviour
 
     public async void DirectJoinLobby()
     {
-        string lobbyCode = lobbyCodeInput.text;
-
-        if (hostLobby!=null)
-        {
-            // Le reste du code...
-        }
-        else
-        {
-            Debug.LogError("hostLobby is null.");
-        }
-
         try
         {
             Unity.Services.Lobbies.Models.Player newPlayer = GetNewPlayer(); // Utilisez la méthode pour obtenir le nouveau joueur avec le nom sauvegardé
@@ -227,6 +227,7 @@ public class LobbyManagerUI : MonoBehaviour
             {
                 Player=newPlayer
             };
+            string lobbyCode = lobbyCodeInput.text;
 
             Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
 
@@ -313,5 +314,41 @@ public class LobbyManagerUI : MonoBehaviour
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) }
             }
         };
+    }
+
+    public void StartHost()
+    {
+        if (NetworkManager.Singleton.StartHost())
+        {
+            Debug.Log("Host started");
+        }
+        else
+        {
+            Debug.Log("Host failed to Start");
+        }
+    }
+
+    public void StartServer()
+    {
+        if (NetworkManager.Singleton.StartServer())
+        {
+            Debug.Log("Server started");
+        }
+        else
+        {
+            Debug.Log("Server failed to Start");
+        }
+    }
+
+    public void StartClient()
+    {
+        if (NetworkManager.Singleton.StartClient())
+        {
+            Debug.Log("Client started");
+        }
+        else
+        {
+            Debug.Log("Client failed to Start");
+        }
     }
 }

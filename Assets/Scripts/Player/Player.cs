@@ -1,131 +1,123 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class Player : NetworkBehaviour, IPlayable
 {
-    //private NetworkVariable<PlayerData> playerDataVar;
+    [Header("Player Data")]
+    [SerializeField] private PlayerData playerData = new PlayerData(new FixedString32Bytes("Roger"));
+    [SerializeField] private PlayerNumber playerNumber;
 
-    PlayerData playerData = new PlayerData(new FixedString32Bytes("Roger"));
+    [Header("Gameplay Settings")]
+    [SerializeField, Range(0f, 200f)] private float health = 200f;
+    [SerializeField] private LayerMask raycastLayerMask;
+    [SerializeField] private GameObject fallingBoxDetectionPrefab;
+    [SerializeField] private GameObject startingCheckpoint;
+    [SerializeField] private GameObject currentCheckpoint;
 
-    [SerializeField]
-    public PlayerNumber playerNumber;
-
-    [SerializeField]
-    public bool hasFinished = false;
-
-    [SerializeField, Range(0f, 200f)]
-    private float heatlh = 200f;
-
-    [SerializeField] 
-    LayerMask raycastLayerMask;
-
-    [SerializeField]
-    private GameObject startingCheckpoint;
-
-    [SerializeField]
-    private GameObject currentCheckpoint;
-
-    [SerializeField]
-    private GameObject fallingBoxDetectionPrefab;
+    [Header("Debug")]
+    [SerializeField] private bool hasFinished = false;
 
     void Start()
     {
-        //this.startingCheckpoint = GameObject.FindGameObjectWithTag("Start");
-        //SetupFallingBoxDetection();
+        // Find the starting checkpoint if not assigned
+        if (startingCheckpoint==null)
+            startingCheckpoint=GameObject.FindGameObjectWithTag("Start");
+
+        SetupFallingBoxDetection();
     }
 
     public override void OnNetworkSpawn()
     {
-        //playerDataVar=new NetworkVariable<PlayerData>(playerData, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        this.startingCheckpoint=GameObject.FindGameObjectWithTag("Start");
+        // Find the starting checkpoint if not assigned
+        if (startingCheckpoint==null)
+            startingCheckpoint=GameObject.FindGameObjectWithTag("Start");
+
         SetupFallingBoxDetection();
     }
 
     private void SetupFallingBoxDetection()
     {
+        // Instantiate FallingBoxDetection and link it to the player
         float newY = transform.position.y-50;
-        // Instancier le FallingBoxDetection et le lier au joueur
         GameObject fallingBoxDetection = Instantiate(fallingBoxDetectionPrefab, new Vector3(transform.position.x, newY, transform.position.z), Quaternion.identity);
         fallingBoxDetection.GetComponent<FallingBoxDetection>().SetPlayer(transform);
     }
 
     void Update()
     {
-        #region Input
+        // Input handling and debugging
+        HandleInput();
+    }
+
+    private void HandleInput()
+    {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log($"Data : PlayerName: {playerData.playerName}, HasFinished: {playerData.hasFinished}");
+            Debug.Log($"Data: PlayerName: {playerData.playerName}, HasFinished: {hasFinished}");
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             QuitGame();
         }
-        #endregion
     }
 
     private void QuitGame()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying=false;
-        #else
-            Application.Quit();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying=false;
+#else
+        Application.Quit();
+#endif
     }
 
     // IPlayable interface implementation
     public void Fell()
     {
-        if (currentCheckpoint!=null)
-        {
-            Vector3 checkpointPosition = currentCheckpoint.transform.position;
-            checkpointPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
-            transform.position=checkpointPosition;
-        }
-        else
-        {
-            // Si le point de contrôle actuel n'est pas défini, vous pouvez choisir de le faire revenir à une position par défaut.
-            // Par exemple, le centre de la scène.
-            Vector3 startingPosition = startingCheckpoint.transform.position;
-            startingPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
-            transform.position=startingPosition;
-        }
+        // Reset player position to the current or starting checkpoint
+        Vector3 checkpointPosition = currentCheckpoint!=null ? currentCheckpoint.transform.position : startingCheckpoint.transform.position;
+        checkpointPosition.y+=4f; // Adjust y-coordinate to avoid teleporting into the platform
+        transform.position=checkpointPosition;
     }
 
     public void UpdateCurrentCheckpoint(GameObject newCheckpoint)
     {
-        this.currentCheckpoint=newCheckpoint;
+        currentCheckpoint=newCheckpoint;
     }
 
     public void StickToPlatform(Vector3 platformMovement)
     {
-        // Déplace le joueur avec la plateforme
+        // Move the player with the platform
         transform.position+=platformMovement;
     }
 
-    public PlayerNumber HasFinished()
+    [ClientRpc]
+    public void HasFinishedClientRpc()
     {
-        this.hasFinished=true;
-        this.playerData.hasFinished=true;
-        return this.playerNumber;
+        hasFinished=true;
+        playerData.hasFinished=true;
+    }
+
+    // IPlayable interface methods
+
+    public PlayerNumber GetPlayerNumber()
+    {
+        return playerNumber;
     }
 
     public bool GetFinishedState()
     {
-        return this.hasFinished;
-        //return this.playerData.hasFinished;
+        return hasFinished;
     }
 
     public Transform GetPlayerTransform()
     {
-        return this.gameObject.transform;
+        return transform;
     }
 
     public string GetPlayerNumberToString()
     {
-        return this.playerNumber.ToString();
+        return playerNumber.ToString();
     }
 }

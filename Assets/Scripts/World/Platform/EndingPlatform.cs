@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,23 +9,13 @@ public class EndingPlatform : EditorObjects
     void Start()
     {
         roundManager=GetComponent<RoundManager>();
-        GetComponent<NetworkObject>().RemoveOwnership();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other!=null)
         {
-            // Check if the hit object implements the IInteractable interface
-            IPlayable player;
-            if (other.TryGetComponent(out player))
-            {
-                if (!player.GetFinishedState())
-                {
-                    // Call the ServerRpc to notify all clients
-                    roundManager.AddPlayerToArrivalList(player.HasFinished());
-                }
-            }
+            TryHandleCollision(other.GetComponent<IPlayable>());
         }
     }
 
@@ -34,15 +23,31 @@ public class EndingPlatform : EditorObjects
     {
         if (collision.collider!=null)
         {
-            // Check if the hit object implements the IInteractable interface
-            IPlayable player;
-            if (collision.collider.TryGetComponent(out player))
-            {
-                if (!player.GetFinishedState())
-                {
-                    roundManager.AddPlayerToArrivalList(player.HasFinished());
-                }
-            }
+            TryHandleCollision(collision.collider.GetComponent<IPlayable>());
         }
+    }
+
+    private void TryHandleCollision(IPlayable player)
+    {
+        if (player!=null&&!player.GetFinishedState())
+        {
+            roundManager.AddPlayerToArrivalList(player.GetPlayerNumber());
+            player.HasFinishedClientRpc();
+            EndGameClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    public void EndGameClientRpc()
+    {
+        StartCoroutine(StartGameEndTimer());
+        Debug.Log("Fin de la partie détectée !");
+    }
+
+    private IEnumerator StartGameEndTimer()
+    {
+        yield return new WaitForSeconds(10f);
+        // Ajoutez le code de fin de partie ici
+        Debug.Log("Fin de la partie !");
     }
 }

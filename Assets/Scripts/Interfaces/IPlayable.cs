@@ -4,8 +4,9 @@ using UnityEngine;
 
 public interface IPlayable
 {
-    public PlayerNumber HasFinished();
+    public void HasFinishedClientRpc();
     public Transform GetPlayerTransform();
+    public PlayerNumber GetPlayerNumber();
     public bool GetFinishedState();
     public void Fell();
     public void UpdateCurrentCheckpoint(GameObject newCheckpoint);
