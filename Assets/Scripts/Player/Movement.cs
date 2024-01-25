@@ -67,6 +67,12 @@ public class Movement : NetworkBehaviour
             else
             {
                 DisableCameras();
+                // Désactivez l'AudioListener si ce n'est pas le joueur local
+                AudioListener audioListener = GetComponentInChildren<AudioListener>();
+                if (audioListener!=null)
+                {
+                    audioListener.enabled=false;
+                }
             }
         }
     }

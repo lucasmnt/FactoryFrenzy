@@ -9,53 +9,54 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 using System;
+using System.Threading.Tasks;
 
 public class LobbyManagerUI : MonoBehaviour
 {
-    // gameObjects holding pannels
-    public GameObject lobbyMainPannel;
+    // Panels
+    public GameObject lobbyMainPanel;
     public GameObject lobbyCreationPanel;
     public GameObject lobbyJoinPanel;
-    public GameObject LobbyConnectedPannel;
+    public GameObject lobbyConnectedPanel;
 
-    // create params
+    // Create params
     public TMP_InputField lobbyNameInput;
     public TMP_InputField maxPlayersInput;
     public Toggle privateToggle;
     private Lobby hostLobby;
     private float heartbeatTimer;
-    
-    // connected params
+
+    // Connected params
     public TMP_Text lobbyCodeCreated;
     public TMP_Text lobbyNameCreated;
     public TMP_Text connectedPlayersCreated;
     public ScrollRect lobbyListScrollView;
 
-    // join params
+    // Join params
     public TMP_InputField lobbyCodeInput;
     public GameObject lobbyButtonPrefab;
 
-    // player params
+    // Player params
     public TMP_InputField playerNameInput;
     private string playerName;
 
-    // launching params
+    // Launching params
     public GameObject networkManagerRef;
+
+    // Sounds
+    public AudioListener audioListener;
 
     // Start is called before the first frame update
     async void Start()
     {
         playerNameInput.text="Roger"+UnityEngine.Random.Range(0, 99);
-
         OpenMainLobbyPanel();
-
-        await UnityServices.InitializeAsync();
-
-        AuthenticationService.Instance.SignedIn+=() => {
-            Debug.Log("Signed in "+AuthenticationService.Instance.PlayerId);
-        };
-
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        await InitializeAuthentication();
+        // Désactivez l'AudioListener si ce n'est pas le joueur local
+        if (audioListener!=null)
+        {
+            audioListener.enabled=false;
+        }
     }
 
     private void Update()
@@ -63,66 +64,57 @@ public class LobbyManagerUI : MonoBehaviour
         HandleLobbyHeartbeat();
     }
 
+    private async Task InitializeAuthentication()
+    {
+        await UnityServices.InitializeAsync();
+
+        AuthenticationService.Instance.SignedIn+=() =>
+        {
+            Debug.Log("Signed in "+AuthenticationService.Instance.PlayerId);
+        };
+
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+    }
+
     public void OpenCreateLobbyPanel()
     {
-        lobbyCreationPanel.SetActive(true);
-        lobbyJoinPanel.SetActive(false);
-        lobbyMainPannel.SetActive(false);
-        LobbyConnectedPannel.SetActive(false);
-        networkManagerRef.SetActive(false);
+        SetPanelsState(true, false, false, false, false);
     }
 
     public void OpenJoinLobbyPanel()
     {
-        lobbyCreationPanel.SetActive(false);
-        lobbyJoinPanel.SetActive(true);
-        lobbyMainPannel.SetActive(false);
-        LobbyConnectedPannel.SetActive(false);
-        networkManagerRef.SetActive(false);
+        SetPanelsState(false, true, false, false, false);
     }
 
     public void OpenMainLobbyPanel()
     {
-        lobbyCreationPanel.SetActive(false);
-        lobbyJoinPanel.SetActive(false);
-        lobbyMainPannel.SetActive(true);
-        LobbyConnectedPannel.SetActive(false);
-        networkManagerRef.SetActive(false);
+        SetPanelsState(false, false, true, false, false);
     }
 
     public void OpenConnectedLobbyPanel()
     {
-        lobbyCreationPanel.SetActive(false);
-        lobbyJoinPanel.SetActive(false);
-        lobbyMainPannel.SetActive(false);
-        LobbyConnectedPannel.SetActive(true);
-        networkManagerRef.SetActive(true);
+        SetPanelsState(false, false, false, true, true);
+    }
+
+    private void SetPanelsState(bool create, bool join, bool main, bool connected, bool networkManager)
+    {
+        lobbyCreationPanel.SetActive(create);
+        lobbyJoinPanel.SetActive(join);
+        lobbyMainPanel.SetActive(main);
+        lobbyConnectedPanel.SetActive(connected);
+        networkManagerRef.SetActive(networkManager);
     }
 
     public void LaunchGame()
     {
         try
         {
-            // Assurez-vous que networkManagerRef n'est pas nul avant d'accéder à sa propriété SceneManager
             if (networkManagerRef!=null)
             {
-                // Assurez-vous d'avoir une référence à votre NetworkManager
                 NetworkManager networkManager = networkManagerRef.GetComponent<NetworkManager>();
-
-                // Si le joueur est l'hôte, lancez le serveur (Host)
-                //if (networkManager.IsHost)
-                //{
-                    StartHost();
-                //}
-                // Si le joueur est un client, lancez le client
-                //else
-                //{
-                //    StartClient();
-                //}
-
-                // Chargez la scène de jeu
-                // Utilisez le réseau pour gérer le chargement de la scène si nécessaire
+                StartHost(networkManager);
                 networkManager.SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
+                DeactivateCamera();
             }
             else
             {
@@ -147,18 +139,15 @@ public class LobbyManagerUI : MonoBehaviour
 
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
             {
-                IsPrivate = isPrivate,
-                Player = newPlayer
+                IsPrivate=isPrivate,
+                Player=newPlayer
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, lobbyMaxPlayers, createLobbyOptions);
-            hostLobby = lobby;
+            hostLobby=lobby;
 
-            lobbyCodeCreated.text = "Lobby Code : " + lobby.LobbyCode;
-            lobbyNameCreated.text = "Lobby Name : " + lobby.Name;
-
-            // Utilisez le lobby comme nécessaire, par exemple, afficher le lobbyCode.
-            Debug.Log(" lobbyMaxPlayers : "+lobbyMaxPlayers+", isPrivate : "+createLobbyOptions.IsPrivate.Value);
+            UpdateLobbyInfo(lobby);
+            Debug.Log($"LobbyMaxPlayers: {lobbyMaxPlayers}, IsPrivate: {createLobbyOptions.IsPrivate.Value}");
         }
         catch (LobbyServiceException e)
         {
@@ -183,37 +172,36 @@ public class LobbyManagerUI : MonoBehaviour
         try
         {
             QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-
-            Debug.Log("Lobbies found: "+queryResponse.Results.Count);
-
-            // Détruit tous les anciens boutons de lobby
-            foreach (Transform child in lobbyListScrollView.content.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            // Crée des nouveaux boutons de lobby
-            for (int i = 0;i<queryResponse.Results.Count;i++)
-            {
-                Lobby lobby = queryResponse.Results[i];
-
-                GameObject lobbyButton = Instantiate(lobbyButtonPrefab, lobbyListScrollView.content.transform);
-                lobbyButton.GetComponent<LobbyCodeHolder>().SetCode(lobby.LobbyCode);
-
-                // Ajuster la position y en fonction de l'index
-                float buttonHeight = lobbyButton.GetComponent<RectTransform>().rect.height;
-                float yPos = -i*buttonHeight;
-
-                RectTransform buttonRectTransform = lobbyButton.GetComponent<RectTransform>();
-                buttonRectTransform.anchoredPosition=new Vector2(buttonRectTransform.anchoredPosition.x, yPos);
-
-                // Assurez-vous de configurer correctement le texte du bouton avec les informations du lobby
-                lobbyButton.GetComponentInChildren<TMP_Text>().text="Lobby: "+lobby.Name;
-            }
+            DestroyOldLobbyButtons();
+            CreateNewLobbyButtons(queryResponse);
         }
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
+        }
+    }
+
+    private void DestroyOldLobbyButtons()
+    {
+        foreach (Transform child in lobbyListScrollView.content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void CreateNewLobbyButtons(QueryResponse queryResponse)
+    {
+        for (int i = 0;i<queryResponse.Results.Count;i++)
+        {
+            Lobby lobby = queryResponse.Results[i];
+            GameObject lobbyButton = Instantiate(lobbyButtonPrefab, lobbyListScrollView.content.transform);
+            lobbyButton.GetComponent<LobbyCodeHolder>().SetCode(lobby.LobbyCode);
+
+            float yPos = -i*lobbyButton.GetComponent<RectTransform>().rect.height;
+            RectTransform buttonRectTransform = lobbyButton.GetComponent<RectTransform>();
+            buttonRectTransform.anchoredPosition=new Vector2(buttonRectTransform.anchoredPosition.x, yPos);
+
+            lobbyButton.GetComponentInChildren<TMP_Text>().text=$"Lobby: {lobby.Name}";
         }
     }
 
@@ -291,21 +279,6 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
-    private async void HandleLobbyHeartbeat()
-    {
-        if (hostLobby!=null)
-        {
-            heartbeatTimer-=Time.deltaTime;
-            if (heartbeatTimer<0f)
-            {
-                float heatbeatTimerMax = 15;
-                heartbeatTimer=heatbeatTimerMax;
-
-                await LobbyService.Instance.SendHeartbeatPingAsync(hostLobby.Id);
-            }
-        }
-    }
-
     private Unity.Services.Lobbies.Models.Player GetNewPlayer()
     {
         return new Unity.Services.Lobbies.Models.Player
@@ -316,15 +289,46 @@ public class LobbyManagerUI : MonoBehaviour
         };
     }
 
-    public void StartHost()
+    private async void HandleLobbyHeartbeat()
     {
-        if (NetworkManager.Singleton.StartHost())
+        if (hostLobby!=null)
+        {
+            heartbeatTimer-=Time.deltaTime;
+            if (heartbeatTimer<0f)
+            {
+                float heartbeatTimerMax = 15;
+                heartbeatTimer=heartbeatTimerMax;
+
+                await LobbyService.Instance.SendHeartbeatPingAsync(hostLobby.Id);
+            }
+        }
+    }
+
+    private void UpdateLobbyInfo(Lobby lobby)
+    {
+        lobbyCodeCreated.text=$"Lobby Code: {lobby.LobbyCode}";
+        lobbyNameCreated.text=$"Lobby Name: {lobby.Name}";
+    }
+
+    private void ActivateCamera()
+    {
+        Camera.main.enabled=true;
+    }
+
+    private void DeactivateCamera()
+    {
+        Camera.main.enabled=false;
+    }
+
+    private void StartHost(NetworkManager networkManager)
+    {
+        if (networkManager.StartHost())
         {
             Debug.Log("Host started");
         }
         else
         {
-            Debug.Log("Host failed to Start");
+            Debug.Log("Host failed to start");
         }
     }
 

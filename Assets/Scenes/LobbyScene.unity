@@ -9175,10 +9175,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ba6390de5e98144b0b505436f31b0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyMainPannel: {fileID: 2066285241}
+  lobbyMainPanel: {fileID: 2066285241}
   lobbyCreationPanel: {fileID: 1531944199}
   lobbyJoinPanel: {fileID: 436402644}
-  LobbyConnectedPannel: {fileID: 1913813764}
+  lobbyConnectedPanel: {fileID: 1913813764}
   lobbyNameInput: {fileID: 100220978}
   maxPlayersInput: {fileID: 1801006728}
   privateToggle: {fileID: 1651345094}
@@ -9190,6 +9190,7 @@ MonoBehaviour:
   lobbyButtonPrefab: {fileID: 6276784357007709855, guid: 22494f5d313580040940b320222dd04e, type: 3}
   playerNameInput: {fileID: 1195413721}
   networkManagerRef: {fileID: 1419734752}
+  audioListener: {fileID: 147257299}
 --- !u!1 &2066285241
 GameObject:
   m_ObjectHideFlags: 0
