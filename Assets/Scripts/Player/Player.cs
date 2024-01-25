@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour, IPlayable
 {
@@ -25,6 +26,10 @@ public class Player : NetworkBehaviour, IPlayable
 
     [SerializeField]
     private GameObject fallingBoxDetectionPrefab;
+
+    [SerializeField]
+    private Animator animator = null;
+    private bool isDancing = false;
 
     void Start()
     {
@@ -52,6 +57,18 @@ public class Player : NetworkBehaviour, IPlayable
         {
             QuitGame();
         }
+
+        if(hasFinished){
+            if(!isDancing){
+                isDancing = !isDancing;
+
+                // Generate a random integer between 1 and 4
+                int randomNumber = UnityEngine.Random.Range(1, 5);
+
+                animator.SetInteger("IsDancing", randomNumber);
+            }          
+        }
+
         #endregion
     }
 
@@ -70,15 +87,15 @@ public class Player : NetworkBehaviour, IPlayable
         if (currentCheckpoint!=null)
         {
             Vector3 checkpointPosition = currentCheckpoint.transform.position;
-            checkpointPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
+            checkpointPosition.y+=4f; // Augmentez la coordonnï¿½e y pour ï¿½viter de se tï¿½lï¿½porter dans la plateforme
             transform.position=checkpointPosition;
         }
         else
         {
-            // Si le point de contrôle actuel n'est pas défini, vous pouvez choisir de le faire revenir à une position par défaut.
-            // Par exemple, le centre de la scène.
+            // Si le point de contrï¿½le actuel n'est pas dï¿½fini, vous pouvez choisir de le faire revenir ï¿½ une position par dï¿½faut.
+            // Par exemple, le centre de la scï¿½ne.
             Vector3 startingPosition = startingCheckpoint.transform.position;
-            startingPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
+            startingPosition.y+=4f; // Augmentez la coordonnï¿½e y pour ï¿½viter de se tï¿½lï¿½porter dans la plateforme
             transform.position=startingPosition;
         }
     }
@@ -90,7 +107,7 @@ public class Player : NetworkBehaviour, IPlayable
 
     public void StickToPlatform(Vector3 platformMovement)
     {
-        // Déplace le joueur avec la plateforme
+        // Dï¿½place le joueur avec la plateforme
         transform.position+=platformMovement;
     }
 

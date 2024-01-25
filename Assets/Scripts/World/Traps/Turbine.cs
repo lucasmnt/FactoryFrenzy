@@ -55,7 +55,9 @@ public class Turbine : EditorObjects
         {
             foreach (Rigidbody rigid in RigidbodiesInWindZoneList)
             {
-                rigid.AddForce(windDirection * windStrength);
+                if(rigid != null){
+                    rigid.AddForce(windDirection * windStrength);
+                }
             }
         }
     }

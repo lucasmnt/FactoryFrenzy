@@ -31,8 +31,8 @@ public class Movement : NetworkBehaviour
     public float interactRange = 10f;
 
     [SerializeField]
-    private Animator animator;
-
+    private Animator animator = null;
+    
     public enum PlayerPOV
     {
         FirstPerson,
@@ -51,21 +51,21 @@ public class Movement : NetworkBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        animator=GetComponent<Animator>();
+        //animator=GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         rb.freezeRotation = true;
 
-        // Vérifier si le jeu est en mode hors ligne (pas de réseau)
+        // Vï¿½rifier si le jeu est en mode hors ligne (pas de rï¿½seau)
         if (!NetworkManager.Singleton.IsServer)
         {
-            // Activer les caméras pour tous les joueurs en mode hors ligne
+            // Activer les camï¿½ras pour tous les joueurs en mode hors ligne
             playerCam.gameObject.SetActive(true);
             camHolder1st.SetActive(true);
             camHolder3rd.SetActive(true);
         }
         else
         {
-            // Si le jeu est en mode réseau, activer les caméras uniquement pour le joueur local
+            // Si le jeu est en mode rï¿½seau, activer les camï¿½ras uniquement pour le joueur local
             if (IsLocalPlayer)
             {
                 playerCam.gameObject.SetActive(true);
@@ -114,11 +114,11 @@ public class Movement : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Créez un rayon depuis la caméra vers l'avant
+            // Crï¿½ez un rayon depuis la camï¿½ra vers l'avant
             Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
             RaycastHit hit;
 
-            // Vérifiez s'il y a une collision avec un objet portant l'interface IInteractable
+            // Vï¿½rifiez s'il y a une collision avec un objet portant l'interface IInteractable
             if (Physics.Raycast(ray, out hit, interactRange, interactLayerMask))
             {
                 IWritable writable = hit.collider.GetComponent<IWritable>();
@@ -142,45 +142,51 @@ public class Movement : NetworkBehaviour
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            // Vérifiez si la touche "Shift" est enfoncée pour courir
-            bool isRunning = Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift);
+            // VÃ©rifiez si la touche "Shift" est enfoncÃ©e pour courir
+            bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
-            // Déterminez la vitesse actuelle en fonction de la marche ou de la course
-            float currentSpeed = isRunning ? (speed*1.2f) : speed;
+            // DÃ©terminez la vitesse actuelle en fonction de la marche ou de la course
+            float currentSpeed = isRunning ? (speed * 1.2f) : speed;
 
-            Vector3 movement = transform.forward*vertical+transform.right*horizontal;
-
-            // Définissez le paramètre "Speed" de l'Animator en fonction de la vitesse
-            animator.SetFloat("Speed", currentSpeed);
+            Vector3 movement = transform.forward * vertical + transform.right * horizontal;
 
             if (rb.isKinematic)
             {
-                transform.Translate(movement*currentSpeed*Time.deltaTime);
+                transform.Translate(movement * currentSpeed * Time.deltaTime);
             }
             else
             {
-                rb.velocity=new Vector3(movement.x*currentSpeed, rb.velocity.y, movement.z*currentSpeed);
+                rb.velocity = new Vector3(movement.x * currentSpeed, rb.velocity.y, movement.z * currentSpeed);
             }
+
+            float relativeSpeed = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+
+            if(relativeSpeed > 0f && !isRunning){
+                animator.SetBool("IsWalking", true);
+            }
+            
+            animator.SetBool("IsRunning", isRunning);
         }
     }
 
+
     private void HandleCameraSwitching()
     {
-        // Vérifiez si le jeu est en mode multijoueur ou hors ligne
+        // Vï¿½rifiez si le jeu est en mode multijoueur ou hors ligne
         if (NetworkManager.Singleton!=null&&!IsOwner)
         {
-            // Seul le propriétaire devrait gérer le changement de caméra en mode multijoueur
+            // Seul le propriï¿½taire devrait gï¿½rer le changement de camï¿½ra en mode multijoueur
             return;
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // Inversez l'état entre première personne et troisième personne
+            // Inversez l'ï¿½tat entre premiï¿½re personne et troisiï¿½me personne
             currentPOV=(currentPOV==PlayerPOV.FirstPerson) ? PlayerPOV.ThirdPerson : PlayerPOV.FirstPerson;
 
-            // Définir la position cible en fonction de l'état actuel
+            // Dï¿½finir la position cible en fonction de l'ï¿½tat actuel
             Vector3 targetPosition = (currentPOV==PlayerPOV.FirstPerson) ? camHolder1st.transform.position : camHolder3rd.transform.position;
 
-            // Commencer la transition de caméra en ajustant directement la position
+            // Commencer la transition de camï¿½ra en ajustant directement la position
             playerCam.transform.position=targetPosition;
         }
     }
@@ -214,17 +220,17 @@ public class Movement : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Créez un rayon depuis la caméra vers l'avant
+            // Crï¿½ez un rayon depuis la camï¿½ra vers l'avant
             Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
             RaycastHit hit;
 
-            // Vérifiez s'il y a une collision avec un objet portant l'interface IInteractable
+            // Vï¿½rifiez s'il y a une collision avec un objet portant l'interface IInteractable
             if (Physics.Raycast(ray, out hit, interactRange, interactLayerMask))
             {
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                 if (interactable!=null)
                 {
-                    // Appel à la méthode Interact de l'objet
+                    // Appel ï¿½ la mï¿½thode Interact de l'objet
                     interactable.Interact();
                 }
             }
