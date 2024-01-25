@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerSolo : MonoBehaviour, IPlayable
@@ -93,9 +94,14 @@ public class PlayerSolo : MonoBehaviour, IPlayable
         transform.position+=platformMovement;
     }
 
-    public PlayerNumber HasFinished()
+    [ClientRpc]
+    public void HasFinishedClientRpc()
     {
         this.hasFinished=true;
+    }
+
+    public PlayerNumber GetPlayerNumber()
+    {
         return this.playerNumber;
     }
 
