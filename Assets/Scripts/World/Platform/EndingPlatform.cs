@@ -1,51 +1,53 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class EndingPlatform : EditorObjects
 {
-    RoundManager roundManager;
-    // Start is called before the first frame update
+    public RoundManager roundManager;
+
     void Start()
     {
-        roundManager = GetComponent<RoundManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        roundManager=GetComponent<RoundManager>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other)
+        if (other!=null)
         {
-            // Check if the hit object implements the IInteractable interface
-            IPlayable player = other.GetComponent<IPlayable>();
-            if (player!=null)
-            {
-                if(player.GetFinishedState()==false)
-                {
-                    roundManager.AddPlayerToArrivalList(player.HasFinished());
-                }
-            }
+            TryHandleCollision(other.GetComponent<IPlayable>());
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider)
+        if (collision.collider!=null)
         {
-            // Check if the hit object implements the IInteractable interface
-            IPlayable player = collision.collider.GetComponent<IPlayable>();
-            if (player!=null)
-            {
-                if (player.GetFinishedState()==false)
-                {
-                    roundManager.AddPlayerToArrivalList(player.HasFinished());
-                }
-            }
+            TryHandleCollision(collision.collider.GetComponent<IPlayable>());
         }
+    }
+
+    private void TryHandleCollision(IPlayable player)
+    {
+        if (player!=null&&!player.GetFinishedState())
+        {
+            roundManager.AddPlayerToArrivalList(player.GetPlayerNumber());
+            player.HasFinishedClientRpc();
+            EndGameClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    public void EndGameClientRpc()
+    {
+        StartCoroutine(StartGameEndTimer());
+        Debug.Log("Fin de la partie détectée !");
+    }
+
+    private IEnumerator StartGameEndTimer()
+    {
+        yield return new WaitForSeconds(10f);
+        // Ajoutez le code de fin de partie ici
+        Debug.Log("Fin de la partie !");
     }
 }
