@@ -5,6 +5,10 @@ using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using TMPro;
 using Unity.Services.Core;
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
+using System;
 
 public class LobbyManagerUI : MonoBehaviour
 {
@@ -33,14 +37,10 @@ public class LobbyManagerUI : MonoBehaviour
 
     // player params
     public TMP_InputField playerNameInput;
-
-    // Préfab de bouton de lobby (ou texte)
-    
-
-    
-
-
     private string playerName;
+
+    // launching params
+    public GameObject networkManagerRef;
 
     // Start is called before the first frame update
     async void Start()
@@ -69,6 +69,7 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyJoinPanel.SetActive(false);
         lobbyMainPannel.SetActive(false);
         LobbyConnectedPannel.SetActive(false);
+        networkManagerRef.SetActive(false);
     }
 
     public void OpenJoinLobbyPanel()
@@ -77,6 +78,7 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyJoinPanel.SetActive(true);
         lobbyMainPannel.SetActive(false);
         LobbyConnectedPannel.SetActive(false);
+        networkManagerRef.SetActive(false);
     }
 
     public void OpenMainLobbyPanel()
@@ -85,6 +87,7 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyJoinPanel.SetActive(false);
         lobbyMainPannel.SetActive(true);
         LobbyConnectedPannel.SetActive(false);
+        networkManagerRef.SetActive(false);
     }
 
     public void OpenConnectedLobbyPanel()
@@ -93,8 +96,33 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyJoinPanel.SetActive(false);
         lobbyMainPannel.SetActive(false);
         LobbyConnectedPannel.SetActive(true);
+        networkManagerRef.SetActive(true);
     }
 
+    public void LaunchGame()
+    {
+        try
+        {
+            // Assurez-vous que networkManagerRef n'est pas nul avant d'accéder à sa propriété SceneManager
+            if (networkManagerRef!=null)
+            {
+                // Assurez-vous d'avoir une référence à votre NetworkManager
+                NetworkManager networkManager = networkManagerRef.GetComponent<NetworkManager>();
+
+                // Chargez la scène de jeu
+                // Utilisez le réseau pour gérer le chargement de la scène si nécessaire
+                networkManager.SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
+            }
+            else
+            {
+                Debug.LogError("networkManagerRef is null. Please assign a valid reference in the inspector.");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+    }
 
     public async void CreateLobby()
     {
@@ -104,9 +132,12 @@ public class LobbyManagerUI : MonoBehaviour
             int lobbyMaxPlayers = int.Parse(maxPlayersInput.text);
             bool isPrivate = privateToggle.isOn;
 
+            Unity.Services.Lobbies.Models.Player newPlayer = GetNewPlayer();
+
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
             {
-                IsPrivate=isPrivate
+                IsPrivate = isPrivate,
+                Player = newPlayer
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, lobbyMaxPlayers, createLobbyOptions);
@@ -124,7 +155,7 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
-    public async void UpdateLobby()
+    public void UpdateLobby()
     {
         try
         {
@@ -142,7 +173,7 @@ public class LobbyManagerUI : MonoBehaviour
         {
             QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
 
-            Debug.Log("Lobbies found : "+queryResponse.Results.Count);
+            Debug.Log("Lobbies found: "+queryResponse.Results.Count);
 
             // Détruit tous les anciens boutons de lobby
             foreach (Transform child in lobbyListScrollView.content.transform)
@@ -151,11 +182,21 @@ public class LobbyManagerUI : MonoBehaviour
             }
 
             // Crée des nouveaux boutons de lobby
-            foreach (Lobby lobby in queryResponse.Results)
+            for (int i = 0;i<queryResponse.Results.Count;i++)
             {
+                Lobby lobby = queryResponse.Results[i];
+
                 GameObject lobbyButton = Instantiate(lobbyButtonPrefab, lobbyListScrollView.content.transform);
-                // Assurez-vous de configurer correctement le bouton avec les informations du lobby
-                // Vous pouvez utiliser lobbyButton.GetComponent<YourButtonScript>().Setup(lobby);
+                lobbyButton.GetComponent<LobbyCodeHolder>().SetCode(lobby.LobbyCode);
+
+                // Ajuster la position y en fonction de l'index
+                float buttonHeight = lobbyButton.GetComponent<RectTransform>().rect.height;
+                float yPos = -i*buttonHeight;
+
+                RectTransform buttonRectTransform = lobbyButton.GetComponent<RectTransform>();
+                buttonRectTransform.anchoredPosition=new Vector2(buttonRectTransform.anchoredPosition.x, yPos);
+
+                // Assurez-vous de configurer correctement le texte du bouton avec les informations du lobby
                 lobbyButton.GetComponentInChildren<TMP_Text>().text="Lobby: "+lobby.Name;
             }
         }
@@ -169,9 +210,25 @@ public class LobbyManagerUI : MonoBehaviour
     {
         string lobbyCode = lobbyCodeInput.text;
 
+        if (hostLobby!=null)
+        {
+            // Le reste du code...
+        }
+        else
+        {
+            Debug.LogError("hostLobby is null.");
+        }
+
         try
         {
-            Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
+            Unity.Services.Lobbies.Models.Player newPlayer = GetNewPlayer(); // Utilisez la méthode pour obtenir le nouveau joueur avec le nom sauvegardé
+
+            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions
+            {
+                Player=newPlayer
+            };
+
+            Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
 
             // Utilisez le lobby comme nécessaire après avoir rejoint.
             Debug.Log("Rejoint le lobby! Nom : "+lobby.Name);
@@ -186,7 +243,14 @@ public class LobbyManagerUI : MonoBehaviour
     {
         try
         {
-            await LobbyService.Instance.QuickJoinLobbyAsync();
+            Unity.Services.Lobbies.Models.Player newPlayer = GetNewPlayer(); // Utilisez la méthode pour obtenir le nouveau joueur avec le nom sauvegardé
+
+            QuickJoinLobbyOptions joinLobbyByCodeOptions = new QuickJoinLobbyOptions
+            {
+                Player=newPlayer
+            };
+
+            await LobbyService.Instance.QuickJoinLobbyAsync(joinLobbyByCodeOptions);
         }
         catch (LobbyServiceException e)
         {
@@ -194,15 +258,35 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
-    public async void SelectedJoinLobby()
+    public void SavePlayerName()
     {
-        try
-        {
+        playerName = playerNameInput.text;
+    }
 
-        }
-        catch (LobbyServiceException e)
+    private void DisplayConnectedPlayers()
+    {
+        if (hostLobby!=null)
         {
-            Debug.Log(e);
+            string connectedPlayersText = "Connected Players:\n";
+
+            foreach (Unity.Services.Lobbies.Models.Player lobbyMember in hostLobby.Players)
+            {
+                // Vérifiez si le joueur a des données
+                if (lobbyMember.Data!=null&&lobbyMember.Data.ContainsKey("PlayerName"))
+                {
+                    // Récupérez l'objet PlayerDataObject associé au nom du joueur
+                    PlayerDataObject playerNameData = lobbyMember.Data["PlayerName"];
+
+                    // Vérifiez si la visibilité est "public" ou "member"
+                    if (playerNameData.Visibility==PlayerDataObject.VisibilityOptions.Public||
+                        playerNameData.Visibility==PlayerDataObject.VisibilityOptions.Member)
+                    {
+                        // Ajoutez le nom du joueur au texte des joueurs connectés
+                        connectedPlayersText+=playerNameData.Value+"\n";
+                    }
+                }
+            }
+            connectedPlayersCreated.text=connectedPlayersText;
         }
     }
 
@@ -221,23 +305,13 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
-    public void SavePlayerName()
+    private Unity.Services.Lobbies.Models.Player GetNewPlayer()
     {
-        playerName = playerNameInput.text;
-    }
-
-    private void DisplayConnectedPlayers()
-    {
-        if (hostLobby!=null)
+        return new Unity.Services.Lobbies.Models.Player
         {
-            string connectedPlayersText = "Connected Players:\n";
-
-            foreach (Unity.Services.Lobbies.Models.Player lobbyMember in hostLobby.Players)
-            {
-                connectedPlayersText+=lobbyMember.Id;
+            Data=new Dictionary<string, PlayerDataObject> {
+                { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) }
             }
-
-            connectedPlayersCreated.text =connectedPlayersText;
-        }
+        };
     }
 }
