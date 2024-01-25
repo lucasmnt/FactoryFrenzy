@@ -41,13 +41,13 @@ public class MovingPlatform : EditorObjects
         foreach (Collider collider in colliders)
         {
             IPlayable iPlayable = collider.GetComponent<IPlayable>();
-            if (iPlayable!=null)
+            if (iPlayable != null)
             {
-                // Calculate the platform movement
-                Vector3 platformMovement = transform.position-previousPosition;
+                // Calculate the platform movement direction
+                Vector3 platformMovementDirection = (transform.position - previousPosition).normalized;
 
-                // Give the player the platform's movement
-                iPlayable.StickToPlatform(platformMovement);
+                // Give the player the platform's movement direction
+                iPlayable.StickToPlatform(platformMovementDirection);
             }
         }
     }
