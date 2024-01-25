@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class Player : NetworkBehaviour, IPlayable
 {
     [Header("Player Data")]
-    [SerializeField] private PlayerData playerData = new PlayerData(new FixedString32Bytes("Roger"));
+    //[SerializeField] private PlayerData playerData = new PlayerData(new FixedString32Bytes("Roger"));
     [SerializeField] private PlayerNumber playerNumber;
 
     [Header("Gameplay Settings")]
@@ -59,30 +59,28 @@ public class Player : NetworkBehaviour, IPlayable
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log($"Data: PlayerName: {playerData.playerName}, HasFinished: {hasFinished}");
+            //Debug.Log($"Data: PlayerName: {playerData.playerName}, HasFinished: {hasFinished}");
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             QuitGame();
         }
-<<<<<<< HEAD
 
-        if(hasFinished){
-            if(!isDancing){
-                isDancing = !isDancing;
+        if (hasFinished)
+        {
+            if (!isDancing)
+            {
+                isDancing=!isDancing;
 
                 // Generate a random integer between 1 and 4
                 int randomNumber = UnityEngine.Random.Range(1, 5);
 
                 animator.SetInteger("IsDancing", randomNumber);
-            }          
+            }
         }
-
-        #endregion
-=======
->>>>>>> 39b3bb23fc7553ce551d0c4679be7b140d281349
     }
+
 
     private void QuitGame()
     {
@@ -96,27 +94,20 @@ public class Player : NetworkBehaviour, IPlayable
     // IPlayable interface implementation
     public void Fell()
     {
-<<<<<<< HEAD
         if (currentCheckpoint!=null)
         {
             Vector3 checkpointPosition = currentCheckpoint.transform.position;
-            checkpointPosition.y+=4f; // Augmentez la coordonn�e y pour �viter de se t�l�porter dans la plateforme
+            checkpointPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
             transform.position=checkpointPosition;
         }
         else
         {
-            // Si le point de contr�le actuel n'est pas d�fini, vous pouvez choisir de le faire revenir � une position par d�faut.
-            // Par exemple, le centre de la sc�ne.
+            // Si le point de contrôle actuel n'est pas défini, vous pouvez choisir de le faire revenir à une position par défaut.
+            // Par exemple, le centre de la scène.
             Vector3 startingPosition = startingCheckpoint.transform.position;
-            startingPosition.y+=4f; // Augmentez la coordonn�e y pour �viter de se t�l�porter dans la plateforme
+            startingPosition.y+=4f; // Augmentez la coordonnée y pour éviter de se téléporter dans la plateforme
             transform.position=startingPosition;
         }
-=======
-        // Reset player position to the current or starting checkpoint
-        Vector3 checkpointPosition = currentCheckpoint!=null ? currentCheckpoint.transform.position : startingCheckpoint.transform.position;
-        checkpointPosition.y+=4f; // Adjust y-coordinate to avoid teleporting into the platform
-        transform.position=checkpointPosition;
->>>>>>> 39b3bb23fc7553ce551d0c4679be7b140d281349
     }
 
     public void UpdateCurrentCheckpoint(GameObject newCheckpoint)
@@ -126,11 +117,6 @@ public class Player : NetworkBehaviour, IPlayable
 
     public void StickToPlatform(Vector3 platformMovement)
     {
-<<<<<<< HEAD
-        // D�place le joueur avec la plateforme
-=======
-        // Move the player with the platform
->>>>>>> 39b3bb23fc7553ce551d0c4679be7b140d281349
         transform.position+=platformMovement;
     }
 
@@ -138,7 +124,7 @@ public class Player : NetworkBehaviour, IPlayable
     public void HasFinishedClientRpc()
     {
         hasFinished=true;
-        playerData.hasFinished=true;
+        //playerData.hasFinished=true;
     }
 
     // IPlayable interface methods
